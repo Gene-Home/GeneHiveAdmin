@@ -42,14 +42,17 @@ geneHiveControllers.controller('JobRunListCtrl', ['$scope','$http','$sortService
         $scope.setPagingData();
     }, true);
     $scope.$watch('sortInfo', function(newVal, oldVal) {
-	console.log("sortInfo watch fired");
 	$scope.setPagingData();
     }, true);
-    $scope.$on('ngGridEventSorted', function(newSort) {
-	console.log("grid sort event fired");
-    });
 
-$scope.selectedJobRun = [];	
+    $scope.selectedJobRun = [];	
+    var dateSort=function(x,y) {
+	var dx=Date.parse(x)
+	var dy=Date.parse(y)
+	if(dx<dy) return -1;
+	if(dy<dx) return 1;
+	return 0;
+    };
     $scope.gridOptions = {
         data: 'myData',
         enablePaging: true,
@@ -63,7 +66,7 @@ $scope.selectedJobRun = [];
         {field:"inputs.name[0]", displayName:'Name'},
         			  {field:'creator', displayName:'Creator'},
         			  {field:'jobType', displayName:'Job Type'},
-                     {field:'runDatetime',displayName:'Run Date'}, 
+                     {field:'runDatetime',displayName:'Run Date', sortFn: dateSort },
                      {field:'status',displayName:'Status',cellTemplate: '<div ng-class="{green: row.getProperty(col.field) ==\'COMPLETE\'}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}],
         multiSelect: false,
         selectedItems: $scope.selectedJobRun
