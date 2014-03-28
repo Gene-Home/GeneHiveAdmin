@@ -12,7 +12,8 @@ geneHiveControllers.controller('JobRunListCtrl', ['JobRun', '$scope','$http','$s
        if (!$scope.$$phase) {
             $scope.$apply();
         }
-	$scope.cachedServerData=JobRun.query(function () {
+	var freshData=JobRun.query(function () {
+	    $scope.cachedServerData = freshData;
 	    $scope.setPagingData();
 	})
     }
