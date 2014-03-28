@@ -7,19 +7,18 @@ angular.module('myApp.controllers', []);
 var geneHiveControllers = angular.module('geneHiveControllers', []); 
 geneHiveControllers.controller('JobRunListCtrl', ['$scope','$http', function($scope,$http) {
     $scope.cachedServerData = null;
-    $http.get('/GeneHive/api/v2/JobRuns/').success(function (data) {		   
-	console.log("in data success");
-	$scope.cachedServerData = data;
-	$scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-	console.log("leaving data success");
-    });
+    $scope.refreshData=function() {
+	$http.get('/GeneHive/api/v2/JobRuns/').success(function (data) {
+	    $scope.cachedServerData = data;
+	    $scope.setPagingData($scope.pagingOptions.currentPage,$scope.pagingOptions.pageSize);
+	})};
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
         pageSizes: [250, 500, 1000],
         pageSize: 250,
         currentPage: 1
     };	
-    $scope.setPagingData = function(data, page, pageSize){	
+    $scope.setPagingData = function(page, pageSize){	
         var pagedData = $scope.cachedServerData.slice((page - 1) * pageSize, page * pageSize);
         $scope.myData = pagedData;
         $scope.totalServerItems = data.length;
@@ -27,14 +26,9 @@ geneHiveControllers.controller('JobRunListCtrl', ['$scope','$http', function($sc
             $scope.$apply();
         }
     };
-    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-        setTimeout(function () {
-            $scope.setPagingData($scope.cachedServerData,page,pageSize);
-        }, 100);
-    };	
     $scope.$watch('pagingOptions', function (newVal, oldVal) {
         if (newVal !== oldVal) {
-          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
+          $scope.setPagingData($scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
         }
     }, true);
 
@@ -56,6 +50,7 @@ $scope.selectedJobRun = [];
         multiSelect: false,
         selectedItems: $scope.selectedJobRun
     };
+    $scope.refreshData();    
 }]);
 
 geneHiveControllers.controller('JobRunDetailsCtrl', ['$scope', '$routeParams',
