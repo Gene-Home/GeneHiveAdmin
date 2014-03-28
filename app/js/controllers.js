@@ -5,17 +5,17 @@
 angular.module('myApp.controllers', []);
 
 var geneHiveControllers = angular.module('geneHiveControllers', []); 
-geneHiveControllers.controller('JobRunListCtrl', ['$scope','$http','$sortService', function($scope,$http,$sortService) {
+geneHiveControllers.controller('JobRunListCtrl', ['JobRun', '$scope','$http','$sortService', function(JobRun,$scope,$http,$sortService) {
     $scope.cachedServerData = null;
     $scope.refreshData=function() {
 	$scope.cachedServerData = null;
        if (!$scope.$$phase) {
             $scope.$apply();
         }
-	$http.get('/GeneHive/api/v2/JobRuns/').success(function (data) {
-	    $scope.cachedServerData = data;
+	$scope.cachedServerData=JobRun.query(function () {
 	    $scope.setPagingData();
-	})};
+	})
+    }
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
         pageSizes: [250, 500, 1000],
