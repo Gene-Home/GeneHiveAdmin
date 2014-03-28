@@ -8,6 +8,10 @@ var geneHiveControllers = angular.module('geneHiveControllers', []);
 geneHiveControllers.controller('JobRunListCtrl', ['$scope','$http', function($scope,$http) {
     $scope.cachedServerData = null;
     $scope.refreshData=function() {
+	$scope.cachedServerData = null;
+       if (!$scope.$$phase) {
+            $scope.$apply();
+        }
 	$http.get('/GeneHive/api/v2/JobRuns/').success(function (data) {
 	    $scope.cachedServerData = data;
 	    $scope.setPagingData($scope.pagingOptions.currentPage,$scope.pagingOptions.pageSize);
