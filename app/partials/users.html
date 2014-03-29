@@ -1,0 +1,122 @@
+
+<div ng-controller="UsersCtrl">
+	<div class="col-md-7 ">
+		<div class="well">
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<b>Users</b> 
+    			<div class="btn-group pull-right">
+    			<input type="button" class="btn btn-success" ng-click="newUser();editing=false;viewing=false;newing=true;clearMessages()" value="New User">
+    			</div>
+    			<div class="clearfix"></div>
+  			</div>
+  			<div class="panel-body">
+				<div style="width: 100%;height: 680px;" ng-grid="gridOptions"></div>
+			</div>
+		</div>
+		</div> 
+	</div>
+	<div class="col-md-5  main">
+		<div class="well" ng-show="selectedUser[0] != null || newing">
+		<div ng-show="viewing || editing || newing" class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">User Details:</h3>
+  			</div>
+  			<div  class="panel-body">
+  				<div ng-show="successMessage" class="alert alert-success">
+  					{{successMessage}}
+				</div>
+				<div ng-show="errorMessage" class="alert alert-danger">
+  					{{errorMessage}}
+				</div>
+  				<h1 ng-show="viewing || editing">User Name: {{selectedUser[0].username}}</h1>
+				<form ng-submit="processForm()">
+					<div ng-show = "newing" class="form-group">
+						<label>User Name</label>
+						<input  class="form-control" type="text" ng-model="user.username" >
+					</div>
+					<div ng-show = "newing" class="form-group">
+						<label>Password</label>
+						<input  class="form-control" type="text" ng-model="user.password" >
+					</div>
+					<div class="form-group">
+						<label>First Name </label>
+						<input ng-show = "editing || newing" class="form-control" type="text" ng-model="user.firstName" >
+						<div ng-show = "viewing">{{selectedUser[0].firstName}}</div>
+					</div>
+					<div class="form-group">
+						<label>Last Name</label>
+						<input ng-show = "editing || newing"  class="form-control" type="text" ng-model="user.lastName">
+						<div ng-show = "viewing">{{selectedUser[0].lastName}}</div>	
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input  ng-show = "editing || newing" class="form-control" type="email" ng-model="user.email" >
+						<div ng-show = "viewing">{{selectedUser[0].email}}</div>
+					</div>
+					<div class="form-group">
+						<label>Group</label>
+  						<select ng-show="newing" ng-model="user.group">
+  							 <option ng-repeat="g in userGroups" value="{{g.name}}">
+        						{{g.name}}
+    						</option>
+  						</select>
+  						<div ng-show="viewing || editing">{{selectedUser[0].group}}</div>
+					</div>
+					<div ng-show = "editing || newing" class="checkbox">
+    					<label>
+    						Super User<input  type="checkbox" ng-model="user.superuser" >	
+    					</label>
+  					</div>
+  					<div ng-show = "viewing">Super User: {{selectedUser[0].superuser}} </div>
+  					<div ng-show = "editing || newing" class="checkbox">
+    					<label>Active 
+      						<input  type="checkbox" ng-model="user.active" >	
+    					</label>
+  					</div>
+  					<div ng-show = "viewing">Active: {{selectedUser[0].active}} </div>
+  					
+
+					<input ng-show = "editing" type="button" class="btn btn-primary  btn-lg" ng-click="updateUser()" value ="Update User">
+					<input ng-show = "newing" type="button" class="btn btn-primary  btn-lg" ng-click="createUser()" value ="Add User">
+					<input ng-show = "viewing" type="button" class="btn btn-primary  btn-lg" ng-click="editUser();editing=true;viewing=false;newing=false;clearMessages()" value ="Edit User">
+					<input ng-show = "editing || newing" type="button" class="btn btn-primary  btn-lg" ng-click="editing=false;viewing=true;newing=false;clearMessages()" value ="Cancel">
+					 <!-- debugging
+					 <pre>selu = {{selectedUser[0] | json }}</pre>
+					 <pre>u = {{user | json}}</pre>
+					 -->
+				</form>
+			</div>
+		</div>
+		
+		
+		<div ng-show="viewing || editing" class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Users Work Files</h3>
+  			</div>
+  			<div class="panel-body">
+    			<ul >
+					<li>File Count: {{workFiles.length | number }}</li>
+					<li>Total Size: {{totalFileSize | number }}</li>
+					<li>Largest File: {{largestFileSize | number }}</li>
+				</ul>	
+  			</div>
+		</div>
+		<div ng-show="viewing || editing" class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Users Job Runs</h3>
+  			</div>
+  			<div class="panel-body">
+    			<ul >
+					<li>Total Job Runs: {{jobRuns.length | number }}</li>
+					<li>Eariliest Job Run: {{earliestJobRunDate  | date:'medium'}}</li>
+					<li>Most Recent Job Run: {{latestJobRunDate  | date:'medium'}}</li>
+					<li>Average Job Run Duration: {{aveJobRunDuration / 3600000 | number:2}} hrs</li>
+					<li>Longest Job Run Duration: {{longestJobRunDuration / 3600000 | number:1}} hrs</li>
+				</ul>	
+  			</div>
+		</div>
+
+		</div>	
+	</div>	
+</div>
