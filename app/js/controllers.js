@@ -1,22 +1,9 @@
 'use strict';
 
-/* Controllers */
 
-angular.module('myApp.controllers', []);
-
-var geneHiveControllers = angular.module('geneHiveControllers', []); 
-geneHiveControllers.controller('JobRunListCtrl', ['JobRun', '$scope','$http','$sortService', function(JobRun,$scope,$http,$sortService) {
-    $scope.cachedServerData = null;
-    $scope.refreshData=function() {
-	$scope.cachedServerData = null;
-       if (!$scope.$$phase) {
-            $scope.$apply();
-        }
-	var freshData=JobRun.query(function () {
-	    $scope.cachedServerData = freshData;
-	    $scope.setPagingData();
-	})
-    }
+function initGrid($scope,$sortService,queryableService,
+		  selectedItemArray,columnDefs)
+{
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
         pageSizes: [250, 500, 1000],
@@ -45,15 +32,6 @@ geneHiveControllers.controller('JobRunListCtrl', ['JobRun', '$scope','$http','$s
     $scope.$watch('sortInfo', function(newVal, oldVal) {
 	$scope.setPagingData();
     }, true);
-
-    $scope.selectedJobRun = [];	
-    var dateSort=function(x,y) {
-	var dx=Date.parse(x)
-	var dy=Date.parse(y)
-	if(dx<dy) return -1;
-	if(dy<dx) return 1;
-	return 0;
-    };
     $scope.gridOptions = {
         data: 'myData',
         enablePaging: true,
@@ -63,16 +41,49 @@ geneHiveControllers.controller('JobRunListCtrl', ['JobRun', '$scope','$http','$s
 	sortInfo: $scope.sortInfo,
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions,
-        columnDefs: [{field:'id', displayName:'ID',width: 30},
-        {field:"inputs.name[0]", displayName:'Name'},
-        			  {field:'creator', displayName:'Creator'},
-        			  {field:'jobType', displayName:'Job Type'},
-                     {field:'runDatetime',displayName:'Run Date', sortFn: dateSort },
-                     {field:'status',displayName:'Status',cellTemplate: '<div ng-class="{green: row.getProperty(col.field) ==\'COMPLETE\'}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}],
+        columnDefs: columnDefs,
         multiSelect: false,
-        selectedItems: $scope.selectedJobRun
+        selectedItems: selectedItemArray
     };
+    $scope.cachedServerData = null;
+    $scope.refreshData=function() {
+	$scope.cachedServerData = null;
+       if (!$scope.$$phase) {
+            $scope.$apply();
+        }
+	var freshData=queryableService.query(function () {
+	    $scope.cachedServerData = freshData;
+	    $scope.setPagingData();
+	})
+    }
     $scope.refreshData();    
+
+}
+
+/* Controllers */
+
+angular.module('myApp.controllers', []);
+
+var geneHiveControllers = angular.module('geneHiveControllers', []); 
+geneHiveControllers.controller('JobRunListCtrl', ['JobRun', '$scope','$http','$sortService', function(JobRun,$scope,$http,$sortService) {
+    $scope.selectedJobRun = [];	
+    var dateSort=function(x,y) {
+	var dx=Date.parse(x)
+	var dy=Date.parse(y)
+	if(dx<dy) return -1;
+	if(dy<dx) return 1;
+	return 0;
+    };
+    var columnDefs=[
+	{field:'id', displayName:'ID',width: 30},
+        {field:"inputs.name[0]", displayName:'Name'},
+        {field:'creator', displayName:'Creator'},
+        {field:'jobType', displayName:'Job Type'},
+        {field:'runDatetime',displayName:'Run Date', sortFn: dateSort },
+        {field:'status',displayName:'Status',cellTemplate: '<div ng-class="{green: row.getProperty(col.field) ==\'COMPLETE\'}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}
+    ];
+    initGrid($scope, $sortService, JobRun, $scope.selectedJobRun, columnDefs);
+
 }]);
 
 geneHiveControllers.controller('JobRunDetailsCtrl', ['$scope', '$routeParams',

@@ -5,8 +5,8 @@ usersController.controller('UserCtrl',['$scope','$http', function($scope,$http){
 }
 
 ])
-usersController.controller('UsersCtrl', ['$scope','$http', 'User','WorkFile','UserGroup','JobRun',
-    function($scope,$http,User,WorkFile,UserGroup,JobRun) {
+usersController.controller('UsersCtrl', ['$scope','$sortService','$http', 'User','WorkFile','UserGroup','JobRun',
+					 function($scope,$sortService,$http,User,WorkFile,UserGroup,JobRun) {
 
     $scope.updateUser = function(){
         User.update({ uname:$scope.user.username }, $scope.user).$promise.then(
@@ -78,60 +78,16 @@ usersController.controller('UsersCtrl', ['$scope','$http', 'User','WorkFile','Us
         //blank user
         $scope.user = {};
     }
-    $scope
- 	$scope.filterOptions = {
-        filterText: "",
-        useExternalFilter: true
-    }; 
-    $scope.totalServerItems = 0;
-    $scope.pagingOptions = {
-        pageSizes: [250, 500, 1000],
-        pageSize: 250,
-        currentPage: 1
-    };	
-    $scope.setPagingData = function(data, page, pageSize){	
-        var pagedData = data.slice((page - 1) * pageSize, page * pageSize);
-        $scope.myData = pagedData;
-        $scope.totalServerItems = data.length;
-        if (!$scope.$$phase) {
-            $scope.$apply();
-        }
-    };
-    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-        setTimeout(function () {
-            var data;
-            if (searchText) {
-                var ft = searchText.toLowerCase();
-                $http.get('/GeneHive/api/v2/Users/').success(function (largeLoad) {		
-                    data = largeLoad.filter(function(item) {
-                        return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-                    });
-                    $scope.setPagingData(data,page,pageSize);
-                });            
-            } else {
-                $http.get('/GeneHive/api/v2/Users/').success(function (largeLoad) {
-                    $scope.setPagingData(largeLoad,page,pageSize);
-                     
-                });
-            }
-        }, 100);
-    };
-	
-    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
-	
-    $scope.$watch('pagingOptions', function (newVal, oldVal) {
-        if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
-          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-        }
-    }, true);
 
-    $scope.$watch('filterOptions', function (newVal, oldVal) {
-        if (newVal !== oldVal) {
-          $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
-        }
-    }, true);
-
-$scope.selectedUser = [];
+    $scope.selectedUser = [];
+    var columnDefs= [
+        {field:'username', displayName:'UserName'},
+        {field:"group", displayName:'Group'},
+        {field:'email', displayName:'Email'},
+        {field:'dateJoined', displayName:'Join Date', cellFilter:'date:\'MM/dd/yyyy\''},
+        {field:'active',displayName:'Active',width:'60'}
+    ];
+    initGrid($scope, $sortService, User, $scope.selectedUser, columnDefs);
 
 var loadWorkFiles  = function(userName){
      WorkFile.query({creator: userName}).$promise.then(function(wfiles){
@@ -201,24 +157,5 @@ $scope.$watch('selectedUser', function(newValue, oldValue){
         loadJobRuns(newValue[0].username);
     }   
 },true);
-    $scope.gridOptions = {
-        data: 'myData',
-        enablePaging: true,
-		showFooter: true,
-        totalServerItems: 'totalServerItems',
-        pagingOptions: $scope.pagingOptions,
-        filterOptions: $scope.filterOptions,
-        columnDefs: [
-            {field:'username', displayName:'UserName'},
-          	{field:"group", displayName:'Group'},
-        	{field:'email', displayName:'Email'},
-        	{field:'dateJoined', displayName:'Join Date', cellFilter:'date:\'MM/dd/yyyy\''},
-          	{field:'active',displayName:'Active',width:'60'}
-        ],
-        multiSelect: false,
-        selectedItems: $scope.selectedUser
-    };
-
-
 }
 ])
