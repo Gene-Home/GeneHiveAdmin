@@ -14,7 +14,7 @@ angular.module('myApp', [
   'geneHiveServices'
 ]).
 config(['$routeProvider', function($routeProvider) {
-	$routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: 'MyCtrl1'});
+
   $routeProvider.when('/jobRuns', {templateUrl: 'partials/jobRuns.html'});
 	$routeProvider.when('/users', {templateUrl: 'partials/users.html', controller: 'UsersCtrl'});
   $routeProvider.otherwise({redirectTo: '/view1'});

@@ -5,7 +5,6 @@
 describe('controllers', function(){
   beforeEach(module('myApp.controllers'));
 
-
   it('should ....', inject(function() {
     //spec body
   }));
