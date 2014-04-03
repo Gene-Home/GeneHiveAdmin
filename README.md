@@ -4,19 +4,19 @@ by a function call and don't handle events.
 
 
 How to run what Angular calls "e2e" tests: 
-be in the root directory of the package
-from there, run scripts/web-server.js (node.js installed)
-go to http://localhost:8000/test/e2e/runner.html
-look at the screen
+* be in the root directory of the package
+* from there, run scripts/web-server.js (node.js installed)
+* go to http://localhost:8000/test/e2e/runner.html
+* look at the screen
 
 
 How to run what Angular calls "unit" tests:
-be in the root directory of the package in two shell windows
-from shell #1, run scripts/test-server.sh and leave it running
-go to http://localhost:9876/
-click a "capture" link
-from shell #2, run scripts/test.sh
-look at shell #2's output
+* be in the root directory of the package in two shell windows
+* from shell #1, run scripts/test-server.sh and leave it running
+* go to http://localhost:9876/
+* click a "capture" link
+* from shell #2, run scripts/test.sh
+* look at shell #2's output
 
 
 
