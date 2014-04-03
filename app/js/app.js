@@ -8,14 +8,17 @@ angular.module('myApp', [
   'myApp.services',
   'myApp.directives',
   'myApp.controllers',
+  'ui.bootstrap',
   'ngGrid',
   'geneHiveControllers',
   'geneHive.UsersController',
+  'geneHive.WorkFilesController',
   'geneHiveServices'
 ]).
 config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/view1', {templateUrl: 'partials/partial1.html', controller: 'MyCtrl1'});
   $routeProvider.when('/jobRuns', {templateUrl: 'partials/jobRuns.html'});
 	$routeProvider.when('/users', {templateUrl: 'partials/users.html', controller: 'UsersCtrl'});
+  $routeProvider.when('/workFiles', {templateUrl: 'partials/workFiles.html', controller: 'WorkFilesCtrl'});
   $routeProvider.otherwise({redirectTo: '/view1'});
 }]);
