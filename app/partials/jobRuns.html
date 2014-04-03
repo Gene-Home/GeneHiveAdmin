@@ -1,24 +1,144 @@
 <div ng-controller="JobRunListCtrl">
 	<div ng-show = "cachedServerData === null">LOADING...LOADING...LOADING...LOADING...LOADING...</div>
-	<div class="col-sm-3 col-md-4 ">
-		<div style="width: 500px;height: 500px;" ng-grid="gridOptions" ng-show = "cachedServerData!==null"></div> 
+	<div class="col-md-7">
+		<div class="well">
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<b>Job Runs</b>
+    		</div>
+    		<div>
+    			<input class="form-control" type="text" ng-model="filterOptions.filterText" >
+    		</div>
+    		<div class="panel-body">	 
+				<div style="width:100%;height: 680px;" ng-grid="gridOptions" ng-show = "cachedServerData!==null"></div>
+			</div> 
+		</div>
+		</div>
 	</div>
 
-	<div class="col-sm-9 col-sm-offset-3 col-md-7 col-md-offset-1 main">
-		<h1 class="page-header">ID: {{selectedJr()[0].id}} <br /> Name: {{selectedJobRun[0].inputs.name[0]}}  </h1>
-		<ul>
-		<li>Status: {{selectedJobRun[0].status}}</li>
-		<li>Location: {{selectedJobRun[0].executionLocation}}</li>
-		<li>Inputs: {{selectedJobRun[0].inputs}}</li>
-		<li>Outputs: {{selectedJobRun[0].outputs}}</li>
-		<li>Tokens: {{selectedJobRun[0].outputTokens}}</li>
-		<li>Err: {{selectedJobRun[0].errorMessage}}</li>
-		<li>Console Output: {{selectedJobRun[0].consoleOutput}}</li>
-		<li>Console Error: {{selectedJobRun[0].consoleError}}</li>
-		<li>Trashed?: {{selectedJobRun[0].trashed}}</li>
-		</ul>
+	<div class="col-md-5 main">
+		<div class="well">
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Job Run <button ng-click="sJobRun(selectedJobRun[0])">test</button></h3>
+  			</div>
+  			<div class="panel-body">
+				<h1 class="page-header">ID: {{jrun.id}} </h1>
+				<ul>
+					<li>Creation Time: {{jrun.creationDate}}</li>
+					<li>Start Time: {{jrun.startDate}}</li>
+					<li>Stop Time: {{jrun.stopDate}}</li>
+					<li>Duration: {{jrun.stopDate - jrun.startDate}} </li>
+				</ul>
+				<ul ng-repeat="ch in jrun.children">
+					<li ng-click="sJobRun(selectedJobRun[0])">ID = {{ch}}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Input Parameters</h3>
+  			</div>
+  			<div class="panel-body">
+  				<table class="table table-condensed">
+  					<th>Parameter Name</th><th>Parameter Value</th>
+  					<tbody ng-repeat="p in jrun.inputParams">  
+  					<tr><td>{{p.inputParamName}}</td><td>{{p.inputParamValue}}</td></tr>
+  					</tbody>
+  				</table>	
+			</div>
+		</div>
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Input Files</h3>
+  			</div>
+  			<div class="panel-body">
+  				<table class="table table-condensed">
+  					<th>ID</th><th>File Type</th><th>Output Name</th><th>JobRun ID</th><th>URL</th><th>temp</th>
+  					<tbody ng-repeat="f in jrun.inputFiles">  
+  						<tr>
+  							<td>{{f.systemID}}</td>
+  							<td>{{f.fileType}}</td>
+  							<td>{{f.outputName}}</td>
+  							<td>{{f.jobRunId}}</td>
+  							<td>{{f.outfileURL}}</td>
+  							<td>{{f.temp}}</td>
+  						</tr>
+  					</tbody>
+  				</table>	
+			</div>
+		</div>
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Output Files
+    				<div class="pull-right"> 
+    					<span class="glyphicon glyphicon-collapse-down" ng-hide="ofCollapse" ng-click="ofCollapse = true"></span>
+    					<span class="glyphicon glyphicon-collapse-up" ng-show="ofCollapse" ng-click="ofCollapse = false"></span>
+    				</div>
+    			</h3>
+  			</div>
+  			<div class="panel-body">
+  				<table class="table">
+  				<th>ID</th><th>File Type</th><th>Output Name</th><th>JobRun ID</th><th>URL</th><th>Temp</th>
+  				<tbody ng-show="ofCollapse" ng-repeat="of in jrun.outputFiles">
+  					<tr>
+  							<td>{{of.systemID}}</td>
+  							<td>{{of.fileType}}</td>
+  							<td>{{of.outputName}}</td>
+  							<td>{{of.jobRunId}}</td>
+  							<td>{{of.outfileURL}}</td>
+  							<td>{{of.temp}}</td>
+  						</tr>
+  				</tbody>
+  				</table>	
+  			</div>
+  		</div>
+
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Images
+    				<div class="pull-right"> 
+    					<span class="glyphicon glyphicon-collapse-down" ng-hide="erCollapse" ng-click="erCollapse = true"></span>
+    					<span class="glyphicon glyphicon-collapse-up" ng-show="erCollapse" ng-click="erCollapse = false"></span>
+    				</div>
+    			</h3>
+  			</div>
+  			<div class="panel-body">
+  				<div ng-repeat="im in jrun.outputImages">
+  				<img src={{im.outfileURL}}/>
+  				</div> 		
+  			</div>
+  		</div>
+		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Console Output
+    				<div class="pull-right"> 
+    					<span class="glyphicon glyphicon-collapse-down" ng-hide="opCollapse" ng-click="opCollapse = true"></span>
+    					<span class="glyphicon glyphicon-collapse-up" ng-show="opCollapse" ng-click="opCollapse = false"></span>
+    				</div>
+    			</h3>
+  			</div>
+  			<div class="panel-body">
+  				<pre collapse="opCollapse" >{{jrun.consoleOutput}}</pre>		
+  			</div>
+  		</div>
+
+  		<div class="panel panel-primary">
+  			<div class="panel-heading">
+    			<h3 class="panel-title">Console Error
+    				<div class="pull-right"> 
+    					<span class="glyphicon glyphicon-collapse-down" ng-hide="erCollapse" ng-click="erCollapse = true"></span>
+    					<span class="glyphicon glyphicon-collapse-up" ng-show="erCollapse" ng-click="erCollapse = false"></span>
+    				</div>
+    			</h3>
+  			</div>
+  			<div class="panel-body">
+  				<pre collapse="erCollapsed" >{{jrun | json}}</pre>		
+  			</div>
+  		</div>
 	</div>
-	<button ng-click="refreshData()">This is a refresh button</button>
+	</div>
+	
 </div>
 
 
