@@ -1,14 +1,16 @@
-<div ng-controller="JobRunListCtrl">
+
 	<div ng-show = "cachedServerData === null">LOADING...LOADING...LOADING...LOADING...LOADING...</div>
 	<div class="col-md-7">
 		<div class="well">
 		<div class="panel panel-primary">
   			<div class="panel-heading">
     			<b>Job Runs</b>
-    		</div>
-    		<div>
-    			<input class="form-control" type="text" ng-model="filterOptions.filterText" >
-    		</div>
+    	
+          <div class="input-group col-xs-4">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+              <input class="form-control" type="text" ng-model="filterOptions.filterText"  placeholder="Search" >
+          </div>
+        </div>
     		<div class="panel-body">	 
 				<div style="width:100%;height: 680px;" ng-grid="gridOptions" ng-show = "cachedServerData!==null"></div>
 			</div> 
@@ -20,7 +22,7 @@
 		<div class="well">
 		<div class="panel panel-primary">
   			<div class="panel-heading">
-    			<h3 class="panel-title">Job Run <button ng-click="sJobRun(selectedJobRun[0])">test</button></h3>
+    			<h3 class="panel-title">Job Run</h3>
   			</div>
   			<div class="panel-body">
 				<h1 class="page-header">ID: {{jrun.id}} </h1>
@@ -30,6 +32,7 @@
 					<li>Stop Time: {{jrun.stopDate}}</li>
 					<li>Duration: {{jrun.stopDate - jrun.startDate}} </li>
 				</ul>
+        <label>Children</label>
 				<ul ng-repeat="ch in jrun.children">
 					<li ng-click="sJobRun(selectedJobRun[0])">ID = {{ch}}</li>
 				</ul>
@@ -132,9 +135,6 @@
     				</div>
     			</h3>
   			</div>
-  			<div class="panel-body">
-  				<pre collapse="erCollapsed" >{{jrun | json}}</pre>		
-  			</div>
   		</div>
 	</div>
 
@@ -152,7 +152,5 @@
 		<li>Trashed?: {{selectedJobRun[0].trashed}}</li>
 		</ul>
 	</div>
-	
-</div>
 
 
