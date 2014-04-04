@@ -17,5 +17,6 @@ config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/jobRuns', {templateUrl: 'partials/jobRuns.html',controller: 'JobRunsCtrl'});
 	$routeProvider.when('/users', {templateUrl: 'partials/users.html', controller: 'UsersCtrl'});
   $routeProvider.when('/workFiles', {templateUrl: 'partials/workFiles.html', controller: 'WorkFilesCtrl'});
-  $routeProvider.otherwise({redirectTo: '/view1'});
+  $routeProvider.when('/dashboard', {templateUrl: 'partials/dashboard.html'})
+  $routeProvider.otherwise({redirectTo: '/dashboard'});
 }]);
