@@ -37,6 +37,14 @@ geneHiveServices.factory('JobRun', ['$resource',
     });
   }]
  );
+// Idea .. can we deep load in the service ???
+geneHiveServices.factory('JobType', ['$resource',
+  function($resource){
+    return $resource('/GeneHive/api/v2/JobTypeProperties/:jobTypeName', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }]
+ );
 
 geneHiveServices.service('GridService',['$q',
 	function($q){
