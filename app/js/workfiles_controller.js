@@ -13,6 +13,7 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$sortService','$http'
         {field:"creator"},
         {field:'originalName'},
         {field:'fileType'},
+        {field:'length'},
         {field:'isTrashed'},
         {field:'isTransient'},
     ];
