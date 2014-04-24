@@ -4,9 +4,10 @@ var usersController = angular.module('geneHive.UsersController', []);
 usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal', 'User','WorkFile','UserGroup','JobRun','GridService',
 					 function($scope,$sortService,$http,$modal,User,WorkFile,UserGroup,JobRun,GridService) {
 
+               
     $scope.filterOptions = {
       filterText: ''
-    };                    
+    }; 
     $scope.updateUser = function(){
         User.update({ uname:$scope.user.username }, $scope.user).$promise.then(
             function(user){
@@ -136,7 +137,6 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             controller: 'UserGroupModalController'
         });
         modalInstance.result.then(function (response) {
-            $scope.ue2 = response;
             console.log(response);
         }, function () {
             console.log('Modal dismissed at: ' + new Date());
