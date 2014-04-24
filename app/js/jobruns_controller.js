@@ -4,9 +4,23 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
   function(JobRun,$scope,$http,$sortService,GridService) {
     $scope.selectedJobRuns = [];
     $scope.isCollapsed = true;
+    // default to the listing view
+    $scope.subview = 'list';
+
+    $scope.getInclude = function(){
+      if ($scope.subview == 'list'){
+          return 'partials/jobRuns.html'
+      }else{
+        return 'partials/jobRunDetails.html'
+      }
+    }
+    $scope.showJobRuns = function(){
+      $scope.subview ='list';
+    }
     $scope.filterOptions = {
       filterText: ''
     };
+
     var showJobRun = function(jobRun){
 
       // Creation Date                                                                                     
@@ -19,6 +33,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
       // STE err                                                                                           
       // Images 
       var jrun = {};
+      jrun.id = jobRun.id;
       jrun.creationDate = jobRun.creationDatetime;
       jrun.startDate = jobRun.runDatetime;
       jrun.stopDate = jobRun.stopDatetime;
@@ -35,21 +50,22 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
           //the sys ID of the file 
           jrun.inputFiles.push({'inputParamName':jobParamName,'fileType':val.fileType,'systemID':jobParamValue});
         }
-        if(val.type=='string'){
-          // if a string, its a simple param name value set
-          jrun.inputParams.push({'inputParamName':jobParamName,'inputParamValue':jobParamValue});
-        }
+        jrun.inputParams.push({'inputParamName':jobParamName,'inputParamValue':jobParamValue,'inputParamType':val.type});
+        
       })// end input types
+
       angular.forEach(jobRun.outputTypes,function(val,key){
         var outputName = key;
+        var outputValue = jobRun.outputs[key]
         // they should all be files but lets check
         if(val.type == 'file'){
           if(val.fileType == 'JPG'){
             var url = 'www.something' + jobRun.outputs[key]
             jrun.outputImages.push({'outfileURL':url})
           }
-          jrun.outputFiles.push({'systemID':'x','fileType':'x','outputName':'x','temp':'x','outfileURL':'c','jobRunId':'x'})
-
+          var token = jobRun.outputTokens[outputName]
+          var downloadLink = '/GeneHive/api/v2/WorkFileContents/' + outputValue[0] + "/" + outputName + "?token" + token
+          jrun.outputFiles.push({'systemID':outputValue,'fileType':val.fileType,'outputName':outputName,'token':token,'link':downloadLink})
         }
       })// end output types
       jrun.consoleOutput = jobRun.consoleOutput;
@@ -67,6 +83,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
 	   return 0;
     };
     var columnDefs=[
+      {field:'id',displayName:'Details',cellTemplate:'<div class="ngCellText"><a ng-click="showJobRunDetails(row.getProperty(col.field))">view</a></div> '},
 	    {field:'id', displayName:'ID',width: 60},
       {field:"inputs.name[0]", displayName:'Name'},
       {field:'creator', displayName:'Creator'},
@@ -83,6 +100,16 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
         showJobRun(newValue[0])
     }   
     },true);
+    $scope.showJobRunDetails = function(jobRunId){
+      // its kinda gross to depend on this
+      var jobRuns = $scope.cachedServerData.filter(
+        function(jr){
+          return (jr.id === jobRunId)
+        }
+      )
+      $scope.subview = 'detail';
+      showJobRun(jobRuns[0]);
+    }
 
 
 }]);
