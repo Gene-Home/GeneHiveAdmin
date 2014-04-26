@@ -1,0 +1,113 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <ol class="breadcrumb">
+    <li><a ng-click="showJobRuns()">Job Runs</a></li>
+    <li class="active">Job Run: {{jrun.id}}</li>
+  </ol>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Job Run</h3>
+    </div>
+    <div class="panel-body">
+    <h1 class="page-header">xID: {{jrun.id}} </h1>
+        <ul>
+          <li>Creation Time: {{jrun.creationDate}}</li>
+          <li>Start Time: {{jrun.startDate}}</li>
+          <li>Stop Time: {{jrun.stopDate}}</li>
+          <li>Duration: {{jrun.stopDate - jrun.startDate}} </li>
+        </ul>
+        <label>Children</label>
+        <ul ng-repeat="ch in jrun.children">
+          <li ng-click="sJobRun(selectedJobRun[0])">ID = {{ch}}</li>
+        </ul>
+      </div>
+  </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Input Parameters</h3>
+        </div>
+        <div class="panel-body">  
+          <table class="table table-condensed">
+            <th>Parameter Name</th><th>Parameter Type</th><th>Parameter Value</th>
+            <tbody ng-repeat="p in jrun.inputParams">  
+              <tr>
+                <td>{{p.inputParamName}}</td>
+                <td>{{p.inputParamType}}</td>
+                <td>{{p.inputParamValue}}</td>
+              </tr>
+            </tbody>
+          </table>  
+      </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Input Files</h3>
+        </div>
+        <div class="panel-body">
+          <table class="table table-condensed">
+            <th>ID</th><th>Param Name</th><th>File Type</th><th>Output Name</th><th>JobRun ID</th><th>URL</th><th>temp</th>
+            <tbody ng-repeat="f in jrun.inputFiles">  
+              <tr>
+                <td>{{f.systemID}}</td>
+                <td>{{f.inputParamName}}</td>
+                <td>{{f.fileType}}</td>
+                <td>{{f.outputName}}</td>
+                <td>{{f.jobRunId}}</td>
+                <td>{{f.outfileURL}}</td>
+                <td>{{f.temp}}</td>
+              </tr>
+            </tbody>
+          </table>  
+       </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Output Files
+          </h3>
+        </div>
+        <div class="panel-body">
+          <table class="table">
+          <th>ID</th><th>File Type</th><th>Output Name</th><th>Manage</th><th>URL</th>
+          <tbody  ng-repeat="of in jrun.outputFiles">
+            <tr>
+                <td>{{of.systemID}}</td>
+                <td>{{of.fileType}}</td>
+                <td>{{of.outputName}}</td>
+                <td>{{of.jobRunId}}</td>
+                <td>{{of.token}}</td>
+                <td><a href='{{of.link}}'>download</a></td>
+              </tr>
+          </tbody>
+          </table>  
+        </div>
+      </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Images
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div ng-repeat="im in jrun.outputImages">
+          placeholder for image          </div>    
+        </div>
+      </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Console Output
+          </h3>
+        </div>
+        <div class="panel-body">
+          <pre collapse="opCollapse" >{{jrun.consoleOutput}}</pre>    
+        </div>
+      </div>
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Console Error
+          </h3>
+        </div>
+        <div class="panel-body">
+          <pre collapse="opCollapse" >{{jrun.consoleError}}</pre>    
+        </div>
+      </div>
+  </div>
