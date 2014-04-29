@@ -156,7 +156,6 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
         modalInstance.result.then(function (response) {
             console.log(response);
         }, function () {
-            var ggg = 32;
             console.log('Modal dismissed at: ' + new Date());
         });
     };
