@@ -1,20 +1,24 @@
-
-	<div ng-show = "cachedServerData === null">LOADING...LOADING...LOADING...LOADING...LOADING...</div>
 	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
 		<div class="panel panel-primary">
   			<div class="panel-heading">
     			<b>Job Runs</b>
-          <div class="input-group col-xs-4">
-              <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-              <input class="form-control" type="text" ng-model="filterOptions.filterText"  placeholder="Search" >
-          </div>
-        </div>
+          		<div class="input-group col-xs-4">
+              		<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+              		<input class="form-control" type="text" ng-model="filterOptions.filterText"  placeholder="Search" >
+          		</div>
+        	</div>
     		<div class="panel-body">	 
-				<div style="width:100%;height: 680px;" ng-grid="gridOptions" ng-show = "cachedServerData!==null"></div>
-			</div> 
+				<div style="width:100%;height:680px" 
+					  ng-grid="gridOptions"
+					  ng-style="{opacity: ((cachedServerData===null) && '.4') }">
+				</div>
+				<div  ng-show="cachedServerData===null" style="position:absolute;left:50%;top:30%;z-index:10000;" >
+					<img src="img/loading.gif">
+					<h1>Loading!</h1>
+				</div>
+				 
+			</div>
 		</div>
-
 	</div>
 	
 

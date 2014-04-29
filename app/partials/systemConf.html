@@ -171,7 +171,7 @@
            If policy.public-user-creation is configured false, the caller must be a superuser. If policy.public-user-creation is configured true, the caller does not have to be a user at all. However, in the event that no superuser already exists, no credentials are needed. (This last case is to help with first-time setup, so you can use the API to make your initial superuser.)
         </span>
       </div>
-      <div class="form-group col-xs-3">
+      <div class="form-group col-xs-4">
         <label for="fromAddress">User Confirm API Body</label>
           <textarea rows="6" class="form-control" ng-model="sysConf['template.user-confirm-api-body']">
           </textarea>
@@ -179,7 +179,7 @@
             Template for email body in a Password Reset when caller provides URL prefix. Substrings $USERNAME, $TOKEN, and $URL are string-replaced.
           </span>
       </div>
-      <div class="form-group col-xs-3">
+      <div class="form-group col-xs-4">
         <label for="fromAddress">User Confirm URL</label>
           <textarea rows="6" class="form-control" ng-model="sysConf['template.user-confirm-url-body']">
           </textarea>
@@ -187,7 +187,7 @@
             Template for email body in a Password Reset when caller provides URL prefix. Substrings $USERNAME, $TOKEN, and $URL are string-replaced.
           </span>
       </div>
-      <div class="form-group col-xs-3">
+      <div class="form-group col-xs-4">
         <label for="fromAddress">User Confirm Email Suject</label>
           <textarea rows="6" class="form-control" ng-model="sysConf['template.user-confirm-subject']">
           </textarea>
@@ -195,7 +195,9 @@
             Template for email body in a Password Reset when caller provides URL prefix. Substrings $USERNAME, $TOKEN, and $URL are string-replaced.
           </span>
       </div>
-      <input type="button" class="btn btn-success  btn-lg" ng-click="updateLoginConf()" value ="Update Login Settings">
+      <div class="form-group col-xs-6">
+        <input type="button" class="btn btn-success  btn-lg" ng-click="updateLoginConf()" value ="Update Login Settings">
+      </div>
     </form>
     </div>
    
