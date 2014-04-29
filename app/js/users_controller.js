@@ -76,6 +76,7 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
     );
 
     var loadWorkFiles  = function(userName){
+     $scope.workFilesLoaded = false;   
      WorkFile.query({creator: userName}).$promise.then(function(wfiles){
                 $scope.workFiles = wfiles;
                 $scope.totalFileSize = 0;
@@ -85,10 +86,12 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
                     if(val.id > $scope.largestFileSize){
                         $scope.largestFileSize = val.id;
                     } 
-                })
+                });
+                $scope.workFilesLoaded = true;
         })
     };
     var loadJobRuns = function(userName){
+        $scope.jobRunsLoaded = false;
         JobRun.query({creator:userName}).$promise.then(function(jobRuns){
             // clear out , could be from last user
             $scope.jobRuns = jobRuns;
@@ -96,6 +99,7 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             $scope.latestJobRunDate = null;
             $scope.aveJobRunDuration = 0;
             $scope.longestJobRunDuration = 0;
+            $scope.jobRunsLoaded = true;
             // if there are none, just return
             if (jobRuns.length == 0){
                 return; 
