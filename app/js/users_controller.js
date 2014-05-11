@@ -74,19 +74,33 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             $scope.loadUserGroups();
         }
     );
-
+    // from http://scratch99.com/web-development/javascript/convert-bytes-to-mb-kb/
+    function bytesToSize(bytes) {
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return 'n/a';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        if (i == 0) return bytes + ' ' + sizes[i];
+        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+    };
     var loadWorkFiles  = function(userName){
      $scope.workFilesLoaded = false;   
      WorkFile.query({creator: userName}).$promise.then(function(wfiles){
                 $scope.workFiles = wfiles;
                 $scope.totalFileSize = 0;
                 $scope.largestFileSize = 0;
+
                 angular.forEach($scope.workFiles, function(val,key){
-                    $scope.totalFileSize += parseInt(val.id);
-                    if(val.id > $scope.largestFileSize){
-                        $scope.largestFileSize = val.id;
+                    if(!val.length){
+                        val.length = 0;
+                    } 
+                    $scope.totalFileSize += parseInt(val.length);
+                    if(val.length > $scope.largestFileSize){
+                        $scope.largestFileSize = val.length;
                     } 
                 });
+                // convert all to human readable units
+                $scope.totalFileSize = bytesToSize($scope.totalFileSize);
+                $scope.largestFileSize = bytesToSize($scope.largestFileSize);
                 $scope.workFilesLoaded = true;
         })
     };
