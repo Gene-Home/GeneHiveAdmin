@@ -88,6 +88,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
       {field:"inputs.name[0]", displayName:'Name'},
       {field:'creator', displayName:'Creator'},
       {field:'jobType', displayName:'Job Type'},
+      {field:'executionLocation', displayName:'Execution Location'},
       {field:'runDatetime',displayName:'Run Date', sortFn: dateSort },
       {field:'status',displayName:'Status',cellTemplate: '<div ng-class="{green: row.getProperty(col.field) ==\'COMPLETE\'}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}
 
