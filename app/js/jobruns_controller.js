@@ -57,13 +57,14 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
       angular.forEach(jobRun.outputTypes,function(val,key){
         var outputName = key;
         var outputValue = jobRun.outputs[key]
+        var token = jobRun.outputTokens[outputName]
         // they should all be files but lets check
         if(val.type == 'file'){
+          jrun.fileSize = bytesToSize(outputValue.length)
           if(val.fileType == 'JPG'){
-            var url = 'www.something' + jobRun.outputs[key]
+            var url = '/GeneHive/api/v2/WorkFileContents/' + outputValue[0] + "/" + outputName + "?token" + token 
             jrun.outputImages.push({'outfileURL':url})
           }
-          var token = jobRun.outputTokens[outputName]
           var downloadLink = '/GeneHive/api/v2/WorkFileContents/' + outputValue[0] + "/" + outputName + "?token" + token
           jrun.outputFiles.push({'systemID':outputValue,'fileType':val.fileType,'outputName':outputName,'token':token,'link':downloadLink})
         }
@@ -90,7 +91,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
       {field:'jobType', displayName:'Job Type'},
       {field:'executionLocation', displayName:'Execution Location'},
       {field:'runDatetime',displayName:'Run Date', sortFn: dateSort },
-      {field:'status',displayName:'Status',cellTemplate: '<div ng-class="{green: row.getProperty(col.field) ==\'COMPLETE\'}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}
+      {field:'status',displayName:'Status',cellTemplate: '<div ng-class="{green: row.getProperty(col.field) ==\'COMPLETE\',red: row.getProperty(col.field) ==\'FAILED\',salmon: row.getProperty(col.field) ==\'ABORTED\'}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}
 
     ];
     GridService.initGrid($scope, $sortService, JobRun, $scope.selectedJobRuns, columnDefs);
