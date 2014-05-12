@@ -13,7 +13,6 @@
           <li>Creation Time: {{jrun.creationDate}}</li>
           <li>Start Time: {{jrun.startDate}}</li>
           <li>Stop Time: {{jrun.stopDate}}</li>
-          <li>Duration: {{jrun.stopDate - jrun.startDate}} </li>
         </ul>
         <label>Children</label>
         <ul ng-repeat="ch in jrun.children">
@@ -73,7 +72,7 @@
                 <td>{{of.fileType}}</td>
                 <td>{{of.outputName}}</td>
                 <td>{{of.jobRunId}}</td>
-                <td>{{of.token}}</td>
+                <td>{{of.fileSize}}</td>
                 <td><a href='{{of.link}}'>download</a></td>
               </tr>
           </tbody>
@@ -88,7 +87,8 @@
         </div>
         <div class="panel-body">
           <div ng-repeat="im in jrun.outputImages">
-          placeholder for image          </div>    
+            <img ng-src="{{im.outfileURL}}"></img>
+          </div>    
         </div>
       </div>
     <div class="panel panel-primary">
