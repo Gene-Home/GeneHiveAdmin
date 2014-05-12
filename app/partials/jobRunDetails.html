@@ -85,7 +85,10 @@
         </div>
         <div class="panel-body">
           <div ng-repeat="im in jrun.outputImages">
+          <p align="center">
+            <h4>{{im.outputName}}</h4>
             <img ng-src="{{im.outfileURL}}"></img>
+            </p>
           </div>    
         </div>
       </div>
