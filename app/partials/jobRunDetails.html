@@ -65,14 +65,12 @@
         </div>
         <div class="panel-body">
           <table class="table">
-          <th>ID</th><th>File Type</th><th>Output Name</th><th>Manage</th><th>URL</th>
+          <th>ID</th><th>File Type</th><th>Output Name</th><th>URL</th>
           <tbody  ng-repeat="of in jrun.outputFiles">
             <tr>
                 <td>{{of.systemID}}</td>
                 <td>{{of.fileType}}</td>
                 <td>{{of.outputName}}</td>
-                <td>{{of.jobRunId}}</td>
-                <td>{{of.fileSize}}</td>
                 <td><a href='{{of.link}}'>download</a></td>
               </tr>
           </tbody>
