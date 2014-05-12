@@ -63,7 +63,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
           jrun.fileSize = bytesToSize(outputValue.length)
           if(val.fileType == 'JPG'){
             var url = '/GeneHive/api/v2/WorkFileContents/' + outputValue[0] + "/" + outputName + "?token=" + token 
-            jrun.outputImages.push({'outfileURL':url})
+            jrun.outputImages.push({'outfileURL':url,'outputName':outputName})
           }
           var downloadLink = '/GeneHive/api/v2/WorkFileContents/' + outputValue[0] + "/" + outputName + "?token=" + token
           jrun.outputFiles.push({'systemID':outputValue,'fileType':val.fileType,'outputName':outputName,'token':token,'link':downloadLink})
