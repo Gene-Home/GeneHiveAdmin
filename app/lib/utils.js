@@ -6,3 +6,10 @@
         if (i == 0) return bytes + ' ' + sizes[i];
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
     };
+     var dateSort=function(x,y) {
+	   var dx=Date.parse(x)
+	   var dy=Date.parse(y)
+	   if(dx<dy) return -1;
+	   if(dy<dx) return 1;
+	   return 0;
+    };
