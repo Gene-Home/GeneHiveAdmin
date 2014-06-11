@@ -9,13 +9,14 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$sortService','$http'
       filterText: ''
     };
  var columnDefs= [
-     {field:'id'},
+     {field:'id',width: 60},
         {field:"creator"},
+        {field: "creationDatetime"},
         {field:'originalName'},
         {field:'fileType'},
         {field:'length'},
-        {field:'isTrashed'},
-        {field:'isTransient'},
+        {field:'isTrashed',width: 80},
+        {field:'isTransient',width: 80},
     ];
     GridService.initGrid($scope, $sortService, WorkFile, $scope.selectedWorkFiles, columnDefs);
 
