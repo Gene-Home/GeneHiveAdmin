@@ -62,8 +62,7 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
     // only one user -- [0]
     $scope.selectedUser = [];
     var columnDefs= [
-        {field:'username'},
-        {field:"group"},
+        {field: 'username'},
         {field:'email'},
         {field:'dateJoined', cellFilter:'date:\'MM/dd/yyyy\''},
         {field:'active',width:'60'}
@@ -155,6 +154,7 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             controller: 'UserGroupModalController'
         });
         modalInstance.result.then(function (response) {
+           // $scope.loadWorkFiles();
             console.log(response);
         }, function () {
             console.log('Modal dismissed at: ' + new Date());

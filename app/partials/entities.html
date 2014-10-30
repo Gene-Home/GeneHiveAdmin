@@ -1,0 +1,49 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+  		<span class="panel-title section-title">Entities</span>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-success btn-sm" ng-click="createClass()">
+            <span class="glyphicon glyphicon-plus"></span>&nbsp;Add Entity
+        </button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="loadClasses()">
+          <span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh
+        </button>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+        
+  	
+  	<div class="panel-body">
+      <div class="input-group col-xs-4" style="padding-bottom:25px;">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+            <input class="form-control" type="text" ng-model="filterOptions.filterText"  placeholder="Search" >
+        </div>
+			<div style="width: 100%;height: 320px;" ng-grid="gridOptions"  ng-style="{opacity: ((cachedServerData===null) && '.4') }"></div>
+      <div  ng-show="cachedServerData===null" style="position:absolute;left:50%;top:30%;z-index:10000;" >
+          <img src="img/loading.gif">
+          <h1>Loading!</h1>
+      </div>
+	  </div>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <span class="panel-title section-title">{{selectedEntities[0].name}}</span>
+      <div class="btn-group pull-right">
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <table class="table table-striped witdh:100">
+      <th>Name</th><th>Val</th>
+      <tbody ng-repeat="(key,val) in selectedEntities[0]">
+        <tr>
+          <td>{{key}}</td>
+          <td>{{val}}</td>  
+        </tr>
+      </tbody>  
+    </table>
+  </div>
+
+</div>  

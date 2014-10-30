@@ -1,9 +1,11 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	<div class="panel panel-primary">
-  		<div class="panel-heading">
-    		<h3 class="panel-title">User Details For:&nbsp;{{selectedUser[0].username}}</h3>
+    <div class="panel-heading">
+  		 <span class="panel-title section-title">User Details For:&nbsp;{{selectedUser[0].username}}</span>
     		<div class="btn-group pull-right">
-    			<input ng-show="viewing" type="button" class="btn btn-success" ng-click="editUser();editing=true;viewing=false;clearMessages()" value ="Edit User">
+    			<button ng-show="viewing" type="button" class="btn btn-success btn-sm" ng-click="editUser();editing=true;viewing=false;clearMessages()">
+            <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit User
+          </button>
     		</div>
     		<div class="clearfix"></div>
     	</div>
@@ -73,8 +75,8 @@
 						</ul>
   					</div> 
   					<div class=" form-group col-xs-6">
-					<input ng-show = "editing" type="button" class="btn btn-primary  btn-lg" ng-click="updateUser()" value ="Update User">
-					<input ng-show = "editing" type="button" class="btn btn-primary  btn-lg" ng-click="editing=false;viewing=true;clearMessages()" value ="Cancel">
+					<input ng-show = "editing" type="button" class="btn btn-primary" ng-click="updateUser()" value ="Update User">
+					<input ng-show = "editing" type="button" class="btn" ng-click="editing=false;viewing=true;clearMessages()" value ="Cancel">
 					 <!-- debugging
 					 <pre>selu = {{selectedUser[0] | json }}</pre>
 					 <pre>u = {{user | json}}</pre>
@@ -86,15 +88,22 @@
 	
 	<div class="panel panel-primary">
   			<div class="panel-heading">
-    			<h3 class="panel-title">Users</h3>
-    			<div class="btn-group pull-right">
-    			<input type="button" class="btn btn-success" ng-click="createUser();clearMessages()" value="New User">
-    			</div>
-    			<div class="clearfix"></div>
+    		  <span class="panel-title section-title">Users&nbsp;</span>
+          <span class="section-toolbar">
+          </span>
+          <span class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="createUser();clearMessages()">
+              <span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh
+            </button>
+            <button type="button" class="btn btn-success btn-sm" ng-click="createUser();clearMessages()">
+              <span class="glyphicon glyphicon-plus"></span>&nbsp;Add User
+            </button>  
+          </span>
+        	<div class="clearfix"></div>
   			</div>
   			
   			<div class="panel-body">
-  			<div class="input-group col-xs-4">
+  			<div class="input-group col-xs-4" style="padding-bottom:25px;">
     			<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
     				<input class="form-control" type="text" ng-model="filterOptions.filterText"  placeholder="Search" >
     		</div>

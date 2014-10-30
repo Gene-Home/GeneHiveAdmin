@@ -36,6 +36,8 @@ angular.module('geneHiveAdmin', [
   'geneHive.JobTypesController',
   'geneHive.UsersController',
   'geneHive.WorkFilesController',
+  'geneHive.EntityClassesController',
+  'geneHive.EntitiesController',
   'geneHiveServices'
 ]).
 config(['$stateProvider', function ($stateProvider) {
@@ -45,6 +47,8 @@ config(['$stateProvider', function ($stateProvider) {
     .state('jobRuns',{url:'/jobRuns',templateUrl: 'partials/jobRun.html',controller:'JobRunsCtrl'})
     .state('users',{url:'/users',templateUrl: 'partials/users.html',controller:'UsersCtrl'})
     .state('workFiles',{url:'/workFiles',templateUrl: 'partials/workFiles.html',controller:'WorkFilesCtrl'})
+    .state('entityClasses',{url:'/entityClasses',templateUrl: 'partials/entityClasses.html',controller:'EntityClassesCtrl'})
+    .state('entities',{url:'/entities',templateUrl: 'partials/entities.html',controller:'EntitiesCtrl'})
     .state('sysConf',{url:'/sysConf',templateUrl: 'partials/systemConf.html',controller:'SysConfCtrl'})
     
 }])

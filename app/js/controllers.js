@@ -22,6 +22,92 @@ geneHiveControllers.controller('TestEmailController',['$scope','$modalInstance',
   }]
 ); 
 
+
+geneHiveControllers.controller('ClassModalController', 
+  function modalController($scope,$modalInstance,EntityClass,entityClass,entityClasses,isCreating){
+    $scope.isCreating = isCreating;
+    $scope.newClass = entityClass;
+    $scope.newVariable = {};
+    $scope.newCode = {};
+    $scope.createSuccess = false;
+    $scope.entityClasses = entityClasses;
+    $scope.removeVariable = function(varName){
+      delete $scope.newClass.variables[varName];
+    };
+    $scope.addVariable = function(){
+
+      var newName = $scope.newVariable.name
+      // there could be no variables in the class
+      // so need to add if null
+      if($scope.newClass.variables == null ){
+        $scope.newClass.variables = {};
+      }
+      // remove the name field before saving
+      delete $scope.newVariable.name 
+      $scope.newClass.variables[newName] = $scope.newVariable;
+      $scope.newVariable = {};
+    };
+    $scope.removeCode = function(code){
+      delete $scope.newVariable.codes[code];
+    }
+    $scope.addCode = function(){
+      if($scope.newVariable.codes == null){
+        $scope.newVariable.codes = {};
+      } 
+      $scope.newVariable.codes[$scope.newCode.code] = $scope.newCode.name;
+
+    }
+    $scope.updateClass = function(isValid){
+      $scope.submitted = true;
+      if(!isValid){
+        return;
+      }
+      //BEFOre the UPDATE WE SHOULD MAp thE REMOVED FIELDS to Null or set 
+      //should be as easy and iterating over the fields from existing and see if they are in the 
+      //new one - shit .. means we have to keep the old one .. right now we just change it ... 
+      // hmmm gott think
+      // HA --- its javascript .. just check for a dynamically added filed called .. remove me
+      // this implies that we need to adjust the GUI
+      // for (fields in )
+      EntityClass.update({'entityClassName':$scope.newClass.name},$scope.newClass).$promise.then(
+        function(entityClass){
+          $scope.errorMessage = null;
+          $scope.successMessage = "Successfully Updated Class: " + entityClass.name;
+          $scope.newClass = angular.copy(entityClass,$scope.newClass)
+          $scope.createSuccess = true;
+        },
+        function(message){
+          $scope.errorMessage = "Error Updating Class: " + message.data;
+        })
+    }
+    $scope.createClass = function(isValid){
+      $scope.submitted = true;
+      if(!isValid){
+        return;
+      }
+      EntityClass.create({},$scope.newClass).$promise.then(
+        function(entityClass){
+          $scope.errorMessage = null;
+          $scope.successMessage = "Successfully Created Class: " + entityClass.name;
+          $scope.newClass = angular.copy(entityClass,$scope.newClass)
+          $scope.createSuccess = true;
+        },
+        function(message){
+          $scope.errorMessage = "Error Creating Class: " + message.data;
+        }
+      )
+    }; //end createClass
+    $scope.ok = function () {
+        $modalInstance.close({'newClass': $scope.newClass});
+        console.log('ok');
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+        console.log('cancel');
+    };
+  }
+)// end ClassModalController
+
 geneHiveControllers.controller('UserGroupModalController', function modalController ($scope, $modalInstance,UserGroup) {
     $scope.newGroup = {};
     $scope.successCreate = false; 
@@ -67,7 +153,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
     toSave['policy.user-change-tokens'] = 
       $scope.sysConf['policy.user-change-tokens'];
     toSave['policy.user-change-tokens'] = 
-      $scope.sysConf['template.user-confirm-subject'];
+      $scope.sysConf['policy.user-change-tokens'];
     toSave['template.user-confirm-api-body'] = 
       $scope.sysConf['template.user-confirm-api-body'];
     toSave['template-user-confirm-url-body'] = 

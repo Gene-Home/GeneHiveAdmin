@@ -16,7 +16,7 @@ jobTypesController.controller('JobTypesCtrl', ['$scope','$sortService','$http', 
         {field:'public'}
     ];
  var getScript = function(jobTypeName){
-     $http({method: 'GET', url: '/GeneHive/api/v2/JobTypeScripts/' + jobTypeName}).
+     $http({method: 'GET', url: '/GeneHive/api/v2/Groups' + jobTypeName}).
         success(function(data, status, headers, config) {
         // this callback will be called asynchronously
         // when the response is available

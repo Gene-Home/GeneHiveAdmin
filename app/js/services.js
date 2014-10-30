@@ -45,7 +45,23 @@ geneHiveServices.factory('JobType', ['$resource',
     });
   }]
  );
-
+geneHiveServices.factory('EntityClass',['$resource',
+  function($resource){
+    return $resource('/GeneHive/api/v2/EntityClasses/:entityClassName', {}, {
+      query: {method:'GET', isArray:true},
+      update: {method:'PUT'},
+      create: {method:'POST'}
+    });
+  }]
+);
+geneHiveServices.factory('Entity',['$resource',
+  function($resource){
+    return $resource('/GeneHive/api/v2/Entities/:entityName', {}, {
+      query: {method:'GET', isArray:true},
+      create: {method:'POST'}
+    });
+  }]
+);
 geneHiveServices.service('GridService',['$q',
 	function($q){
 	this.initGrid = function initGrid($scope,$sortService,queryableService,
@@ -83,10 +99,10 @@ geneHiveServices.service('GridService',['$q',
     $scope.gridOptions = {
         data: 'myData',
         enablePaging: true,
-		showFooter: true,
-	    useExternalSorting: true,
+		    showFooter: true,
+	       useExternalSorting: true,
         totalServerItems: 'totalServerItems',
-	    sortInfo: $scope.sortInfo,
+	       sortInfo: $scope.sortInfo,
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions,
         columnDefs: columnDefs,

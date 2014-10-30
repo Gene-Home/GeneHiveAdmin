@@ -16,6 +16,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
     }
     $scope.showJobRuns = function(){
       $scope.subview ='list';
+      var ddd = 32;
     }
     $scope.filterOptions = {
       filterText: ''
