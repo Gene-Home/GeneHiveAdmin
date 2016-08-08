@@ -1,1 +1,1 @@
-An Admin front end for the Gene Hive Application
+An Admin front end for the Gene Hive Application.
