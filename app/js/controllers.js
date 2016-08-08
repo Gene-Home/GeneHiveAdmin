@@ -22,6 +22,92 @@ geneHiveControllers.controller('TestEmailController',['$scope','$modalInstance',
   }]
 ); 
 
+
+geneHiveControllers.controller('ClassModalController', 
+  function modalController($scope,$modalInstance,EntityClass,entityClass,entityClasses,isCreating){
+    $scope.isCreating = isCreating;
+    $scope.newClass = entityClass;
+    $scope.newVariable = {};
+    $scope.newCode = {};
+    $scope.createSuccess = false;
+    $scope.entityClasses = entityClasses;
+    $scope.removeVariable = function(varName){
+      delete $scope.newClass.variables[varName];
+    };
+    $scope.addVariable = function(){
+
+      var newName = $scope.newVariable.name
+      // there could be no variables in the class
+      // so need to add if null
+      if($scope.newClass.variables == null ){
+        $scope.newClass.variables = {};
+      }
+      // remove the name field before saving
+      delete $scope.newVariable.name 
+      $scope.newClass.variables[newName] = $scope.newVariable;
+      $scope.newVariable = {};
+    };
+    $scope.removeCode = function(code){
+      delete $scope.newVariable.codes[code];
+    }
+    $scope.addCode = function(){
+      if($scope.newVariable.codes == null){
+        $scope.newVariable.codes = {};
+      } 
+      $scope.newVariable.codes[$scope.newCode.code] = $scope.newCode.name;
+
+    }
+    $scope.updateClass = function(isValid){
+      $scope.submitted = true;
+      if(!isValid){
+        return;
+      }
+      //BEFOre the UPDATE WE SHOULD MAp thE REMOVED FIELDS to Null or set 
+      //should be as easy and iterating over the fields from existing and see if they are in the 
+      //new one - shit .. means we have to keep the old one .. right now we just change it ... 
+      // hmmm gott think
+      // HA --- its javascript .. just check for a dynamically added filed called .. remove me
+      // this implies that we need to adjust the GUI
+      // for (fields in )
+      EntityClass.update({'entityClassName':$scope.newClass.name},$scope.newClass).$promise.then(
+        function(entityClass){
+          $scope.errorMessage = null;
+          $scope.successMessage = "Successfully Updated Class: " + entityClass.name;
+          $scope.newClass = angular.copy(entityClass,$scope.newClass)
+          $scope.createSuccess = true;
+        },
+        function(message){
+          $scope.errorMessage = "Error Updating Class: " + message.data;
+        })
+    }
+    $scope.createClass = function(isValid){
+      $scope.submitted = true;
+      if(!isValid){
+        return;
+      }
+      EntityClass.create({},$scope.newClass).$promise.then(
+        function(entityClass){
+          $scope.errorMessage = null;
+          $scope.successMessage = "Successfully Created Class: " + entityClass.name;
+          $scope.newClass = angular.copy(entityClass,$scope.newClass)
+          $scope.createSuccess = true;
+        },
+        function(message){
+          $scope.errorMessage = "Error Creating Class: " + message.data;
+        }
+      )
+    }; //end createClass
+    $scope.ok = function () {
+        $modalInstance.close({'newClass': $scope.newClass});
+        console.log('ok');
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+        console.log('cancel');
+    };
+  }
+)// end ClassModalController
+
 geneHiveControllers.controller('UserGroupModalController', function modalController ($scope, $modalInstance,UserGroup) {
     $scope.newGroup = {};
     $scope.successCreate = false; 
@@ -67,13 +153,13 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
     toSave['policy.user-change-tokens'] = 
       $scope.sysConf['policy.user-change-tokens'];
     toSave['policy.user-change-tokens'] = 
-      $scope.sysConf['template.user-confirm-subject'];
+      $scope.sysConf['policy.user-change-tokens'];
     toSave['template.user-confirm-api-body'] = 
       $scope.sysConf['template.user-confirm-api-body'];
     toSave['template-user-confirm-url-body'] = 
       $scope.sysConf['template-user-confirm-url-body'];
         
-    $http({method: 'POST', data:toSave,url: '/GeneHive/api/v2/Configuration'}).
+    $http({method: 'POST', data:toSave,url: '/hive/v2/Configuration'}).
       success(function(data, status, headers, config) {
         $scope.updateLoginConfSuccess = true;
       }).
@@ -93,7 +179,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
     toSave['mail.smtp.from'] = $scope.sysConf['mail.smtp.from'];
     toSave['mail.smtp.starttls.enable'] = $scope.sysConf['mail.smtp.starttls.enable'];
 
-    $http({method: 'POST', data:toSave,url: '/GeneHive/api/v2/Configuration'}).
+    $http({method: 'POST', data:toSave,url: '/hive/v2/Configuration'}).
         success(function(data, status, headers, config) {
             $scope.updateSmtpConfSuccess = true;
         }).
@@ -103,14 +189,21 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
         });
     };
   var getExeLocation = function(){
-     $http({method: 'GET', url: '/GeneHive/api/v2/ExecutionLocations'}).
+     $http({method: 'GET', url: '/hive/v2/ExecutionLocations'}).
         success(function(data, status, headers, config) {
           $scope.exeLocations = data;
         }).
         error(function(data, status, headers, config) {})
-  }  
+  };
+  var getStorageLocations = function(){
+    $http({method: 'GET', url: '/hive/v2/WorkFileStorage/?parameters=true'}).
+        success(function(data, status, headers, config) {
+          $scope.storageLocations = data;
+        }).
+        error(function(data, status, headers, config) {})
+  };  
   var getConf = function(){
-     $http({method: 'GET', url: '/GeneHive/api/v2/Configuration'}).
+     $http({method: 'GET', url: '/hive/v2/Configuration'}).
         success(function(data, status, headers, config) {
         // this callback will be called asynchronously
         // when the response is available
@@ -141,7 +234,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
       $scope.sending = true;  
       $scope.testResultsSuccess = null;
       $scope.testResultsError = null;
-      $http({method: 'POST', data: $scope.sysConf,url: '/GeneHive/api/v2/MailTest'}).
+      $http({method: 'POST', data: $scope.sysConf,url: '/hive/v2/MailTest'}).
         success(function(data, status, headers, config) {
             $scope.sending = false;
             $scope.testResultsSuccess = data;
@@ -165,6 +258,33 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
           }
 
 ]);
+geneHiveControllers.controller('StorageConfModalController', function modalController ($scope, $modalInstance,StorageLocation,locationName) {
+    
+    $scope.locName = locationName;
+    $scope.deleteLocations = function(){
+      StorageLocation.delete({wfsName:$scope.locName},{}).$promise.then(
+        function(message){
+          $scope.errorMessage = null;
+          // its odd, if we use the retured message, its an array .. hmm
+          //$scope.successMessage = message;
+          $scope.successMessage = "Successfully Remove Location: " + locationName 
+        },
+        function(message){
+          $scope.errorMessage = "Error Removing Location: " + message.data;
+        }    
+      )
+    }
+
+    $scope.ok = function () {
+
+        $modalInstance.close('delete');
+        console.log('ok');
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+        console.log('cancel');
+    };
+});
 geneHiveControllers.controller('UserModalController', function modalController ($scope, $modalInstance,User,userGroups) {
     
     $scope.newUser = {};

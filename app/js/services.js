@@ -1,19 +1,26 @@
 
 /* Services */
-
+var api_url = '/hive/v2/';
 var geneHiveServices = angular.module('geneHiveServices', ['ngResource']);
 
 geneHiveServices.factory('WorkFile',['$resource',
   function($resource){
-    return $resource('/GeneHive/api/v2/WorkFileProperties/', {}, {
+    return $resource(api_url + 'WorkFileProperties/', {}, {
       query: {method:'GET', isArray:true}
     });
   }]
  );
-
+geneHiveServices.factory('StorageLocation',['$resource',
+  function($resource){
+    return $resource(api_url + 'WorkFileStorage/:wfsName?parameters=true', {}, {
+      query: {method:'GET', isArray:true},
+      update: { method:'PUT' }
+    });
+  }]
+ );
 geneHiveServices.factory('UserGroup',['$resource',
   function($resource){
-    return $resource('/GeneHive/api/v2/Groups/', {}, {
+    return $resource(api_url + 'Groups/', {}, {
       query: {method:'GET', isArray:true},
       create: {method:'POST'}
     });
@@ -22,7 +29,7 @@ geneHiveServices.factory('UserGroup',['$resource',
 
 geneHiveServices.factory('User',['$resource',
   function($resource){
-    return $resource('/GeneHive/api/v2/Users/:uname', {}, {
+    return $resource(api_url + 'Users/:uname', {}, {
       query: {method:'GET', isArray:true},
       update: {method:'PUT'},
       create: {method:'POST'}
@@ -32,7 +39,7 @@ geneHiveServices.factory('User',['$resource',
  
 geneHiveServices.factory('JobRun', ['$resource',
   function($resource){
-    return $resource('/GeneHive/api/v2/JobRuns/:jobRunId', {}, {
+    return $resource(api_url + 'JobRuns/:jobRunId', {}, {
       query: {method:'GET', isArray:true}
     });
   }]
@@ -40,12 +47,28 @@ geneHiveServices.factory('JobRun', ['$resource',
 // Idea .. can we deep load in the service ???
 geneHiveServices.factory('JobType', ['$resource',
   function($resource){
-    return $resource('/GeneHive/api/v2/JobTypeProperties/:jobTypeName', {}, {
+    return $resource(api_url + 'JobTypeProperties/:jobTypeName', {}, {
       query: {method:'GET', isArray:true}
     });
   }]
  );
-
+geneHiveServices.factory('EntityClass',['$resource',
+  function($resource){
+    return $resource(api_url + 'EntityClasses/:entityClassName', {}, {
+      query: {method:'GET', isArray:true},
+      update: {method:'PUT'},
+      create: {method:'POST'}
+    });
+  }]
+);
+geneHiveServices.factory('Entity',['$resource',
+  function($resource){
+    return $resource(api_url + 'Entities/:entityName', {}, {
+      query: {method:'GET', isArray:true},
+      create: {method:'POST'}
+    });
+  }]
+);
 geneHiveServices.service('GridService',['$q',
 	function($q){
 	this.initGrid = function initGrid($scope,$sortService,queryableService,
@@ -83,10 +106,10 @@ geneHiveServices.service('GridService',['$q',
     $scope.gridOptions = {
         data: 'myData',
         enablePaging: true,
-		showFooter: true,
-	    useExternalSorting: true,
+		    showFooter: true,
+	       useExternalSorting: true,
         totalServerItems: 'totalServerItems',
-	    sortInfo: $scope.sortInfo,
+	       sortInfo: $scope.sortInfo,
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions,
         columnDefs: columnDefs,

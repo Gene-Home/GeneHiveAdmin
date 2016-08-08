@@ -1,7 +1,7 @@
 var jobRunsController = angular.module('geneHive.JobRunsController', []);
 
-jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortService','GridService', 
-  function(JobRun,$scope,$http,$sortService,GridService) {
+jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','uiGridConstants',
+  function(JobRun,$scope,$http,uiGridConstants) {
     $scope.selectedJobRuns = [];
     $scope.isCollapsed = true;
     // default to the listing view
@@ -16,6 +16,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
     }
     $scope.showJobRuns = function(){
       $scope.subview ='list';
+      var ddd = 32;
     }
     $scope.filterOptions = {
       filterText: ''
@@ -84,7 +85,7 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
 	   return 0;
     };
     var columnDefs=[
-      {field:'id',displayName:'Details',cellTemplate:'<div class="ngCellText"><a ng-click="showJobRunDetails(row.getProperty(col.field))">view</a></div> '},
+      //{field:'id',displayName:'Details',cellTemplate:'<div class="ngCellText"><a ng-click="showJobRunDetails(row.getProperty(col.field))">view</a></div> '},
 	    {field:'id', displayName:'ID',width: 60},
       {field:"inputs.name[0]", displayName:'Name'},
       {field:'creator', displayName:'Creator'},
@@ -94,7 +95,42 @@ jobRunsController.controller('JobRunsCtrl', ['JobRun', '$scope','$http','$sortSe
       {field:'status',displayName:'Status',cellTemplate: '<div ng-class="{green: row.getProperty(col.field) ==\'COMPLETE\',red: row.getProperty(col.field) ==\'FAILED\',salmon: row.getProperty(col.field) ==\'ABORTED\'}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>'}
 
     ];
-    GridService.initGrid($scope, $sortService, JobRun, $scope.selectedJobRuns, columnDefs);
+     $scope.gridOptions = {
+        enableFiltering: true,
+        enableSorting: true,
+        enableRowSelection: true,
+        columnDefs: columnDefs,
+        enableFullRowSelection: true,
+        multiSelect: false,
+        noUnselect: true,
+        selectedItems: $scope.selectedJobRuns
+    
+    };
+     $scope.gridOptions.onRegisterApi = function( gridApi ) {
+            $scope.gridApi = gridApi;
+            //$scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
+            $scope.loadJobRuns();
+            gridApi.selection.on.rowSelectionChanged($scope,function(row){
+                var msg = 'row selected ' + row.isSelected;
+                showJobRun(row.entity);
+                 //$scope.showJSON($scope.selectedJobType);
+                //$scope.selectedUser = row.entity;
+                //$scope.clearMessages();  
+                // TODO these should be chained
+                //loadWorkFiles($scope.selectedUser.username);
+                //load the new ones
+                //loadJobRuns($scope.selectedUser.username);
+                
+            });
+            //needs to be called to have rows selectable
+            $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.OPTIONS);
+    };
+    $scope.loadJobRuns = function(){
+    JobRun.query(function(jobRuns){
+        $scope.gridOptions.data = jobRuns;
+    })
+} 
+    //GridService.initGrid($scope, $sortService, JobRun, $scope.selectedJobRuns, columnDefs);
 
     $scope.$watch('selectedJobRuns', function(newValue, oldValue){
     // only make the call if selectedJobRuns has a length of at least 1

@@ -1,24 +1,59 @@
-	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-		<div class="panel panel-primary">
-  			<div class="panel-heading">
-    			<b>Job Runs</b>
-          		<div class="input-group col-xs-4">
-              		<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-              		<input class="form-control" type="text" ng-model="filterOptions.filterText"  placeholder="Search" >
-          		</div>
-        	</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<h1 class="page-header">Job Runs</h1>
+	 <div class="row ">
+	 	<div class="col-xs-6 col-sm-3 placeholder">
+	 		<h1 class="page-header">ID: {{jrun.id}} </h1>
+        	<ul>
+          		<li>Creation Time: {{jrun.creationDate}}</li>
+          		<li>Start Time: {{jrun.startDate}}</li>
+          		<li>Stop Time: {{jrun.stopDate}}</li>
+        	</ul>
+        	<label>Children</label>
+        	<ul ng-repeat="ch in jrun.children">
+          		<li ng-click="sJobRun(selectedJobRun[0])">ID = {{ch}}</li>
+        	</ul>	
+	 	</div>
+	 	<div class="col-xs-6 col-sm-3 placeholder">
+	 		<table class="table table-condensed">
+            <th>Parameter Name</th><th>Parameter Type</th><th>Parameter Value</th>
+            <tbody ng-repeat="p in jrun.inputParams">  
+              <tr>
+                <td>{{p.inputParamName}}</td>
+                <td>{{p.inputParamType}}</td>
+                <td>{{p.inputParamValue}}</td>
+              </tr>
+            </tbody>
+          </table>  
+	 	</div>
+	 	<div class="col-xs-6 col-sm-3 placeholder">
+	 		 <table class="table table-condensed">
+            <th>ID</th><th>Param Name</th><th>File Type</th><th>Output Name</th><th>JobRun ID</th><th>URL</th><th>temp</th>
+            <tbody ng-repeat="f in jrun.inputFiles">  
+              <tr>
+                <td>{{f.systemID}}</td>
+                <td>{{f.inputParamName}}</td>
+                <td>{{f.fileType}}</td>
+                <td>{{f.outputName}}</td>
+                <td>{{f.jobRunId}}</td>
+                <td>{{f.outfileURL}}</td>
+                <td>{{f.temp}}</td>
+              </tr>
+            </tbody>
+          </table>  
+	 	</div>
+	 	<div class="col-xs-6 col-sm-3 placeholder">
+	 	</div>
+	 </div>
+
+
+
+
     		<div class="panel-body">	 
-				<div style="width:100%;height:680px" 
-					  ng-grid="gridOptions"
-					  ng-style="{opacity: ((cachedServerData===null) && '.4') }">
-				</div>
-				<div  ng-show="cachedServerData===null" style="position:absolute;left:50%;top:30%;z-index:10000;" >
-					<img src="img/loading.gif">
-					<h1>Loading!</h1>
+				<div style="width:100%;height:680px" ui-grid="gridOptions" ui-grid-selection >
 				</div>
 				 
 			</div>
-		</div>
+		
 	</div>
 	
 

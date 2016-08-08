@@ -1,14 +1,27 @@
 var usersController = angular.module('geneHive.UsersController', []);
 
 
-usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal', 'User','WorkFile','UserGroup','JobRun','GridService',
-					 function($scope,$sortService,$http,$modal,User,WorkFile,UserGroup,JobRun,GridService) {
+usersController.controller('UsersCtrl', ['$scope','$http','$modal', 'User','WorkFile','UserGroup','JobRun','uiGridConstants',
+					 function($scope,$http,$modal,User,WorkFile,UserGroup,JobRun, uiGridConstants) {
 
-               
-    $scope.filterOptions = {
-      filterText: ''
-    }; 
+    
+    // default to the listing view
+    $scope.subview = 'list';
+    $scope.getInclude = function(){
+      if ($scope.subview == 'list'){
+          return 'partials/users.html'
+      }else{
+        return 'partials/userEdit.html'
+      }
+    }
+    $scope.listUsers = function(){
+      $scope.subview ='list';
+    }                    
+
+
     $scope.updateUser = function(){
+        //scrape the names off the groups and set them to the user
+        $scope.user.groups = $scope.bsObj.editedUserGroups.map(function(grp){return grp.name});    
         User.update({ uname:$scope.user.username }, $scope.user).$promise.then(
             function(user){
                 // set the success message
@@ -18,7 +31,8 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
                 $scope.viewing = true;
                 $scope.newing = false;
                 //update the user in the grid
-                $scope.selectedUser[0] = angular.copy(user); 
+                $scope.selectedUser = angular.copy(user);
+
             },
             function(message){
                 // set the message
@@ -27,10 +41,16 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             )
     };// end updateUser
 
+    $scope.loadAllUsers = function(){
+        User.query(function(data){
+            $scope.gridOptions.data = data;
+        })
+    }
     $scope.loadUserGroups = function(){
         UserGroup.query().$promise.then(
             function(groups){
-                $scope.userGroups = groups;
+                $scope.userGroups = [{name:'All Groups'}];
+                $scope.userGroups = $scope.userGroups.concat(groups);
             }
         )
     };
@@ -45,7 +65,10 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
     $scope.editUser = function(){
         // editing the currentUser
         // need to copy first in case of cancel/rollback
-        $scope.user = angular.copy($scope.selectedUser[0]);
+        $scope.user = angular.copy($scope.selectedUser);
+        // need to convert user.groups from just string array to proper Group objects
+        $scope.bsObj.editedUserGroups = $scope.user.groups.map(function(gname){return {name: gname} });
+        $scope.subview = 'edit';
     }
     $scope.newUser = function(){
         //blank user
@@ -53,27 +76,73 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
     }
     // start off viewing the current user
     $scope.user = {};
-    $scope.viewing = true;
-    $scope.editing = false;
-    $scope.newing = false;
-    
+    // need this when editiing a user and yes, this is BS
+    // have to add editedUserGroups to some dummy obj because
+    // it MUST have a dot in it for ui-select!
+    $scope.bsObj = {};
+    $scope.bsObj.editedUserGroups = [];
+    $scope.bsObj.selectedGroup = {name: "All Groups"};
     // array to store the selected users from the grid
     // we are not allowing multi select so there will be 
     // only one user -- [0]
     $scope.selectedUser = [];
     var columnDefs= [
-        {field:'username'},
-        {field:"group"},
+        {field: 'username'},
+        {field: 'group',displayName: 'default group'},
         {field:'email'},
         {field:'dateJoined', cellFilter:'date:\'MM/dd/yyyy\''},
-        {field:'active',width:'60'}
+        {field:'active'},
+        {field: 'superuser'}
     ];
-    // Loads up the users and groups
-    GridService.initGrid($scope, $sortService, User, $scope.selectedUser, columnDefs).then(
-        function(){
+    $scope.gridOptions = {
+        enableSorting: true,
+        enableRowSelection: true,
+        columnDefs: columnDefs,
+        enableFullRowSelection: true,
+        multiSelect: false,
+        noUnselect: true,
+        selectedItems: $scope.selectedUser
+    
+    };
+  
+    $scope.gridOptions.onRegisterApi = function( gridApi ) {
+            $scope.gridApi = gridApi;
+            $scope.gridApi.grid.registerRowsProcessor( $scope.singleFilter, 200 );
             $scope.loadUserGroups();
-        }
-    );
+            gridApi.selection.on.rowSelectionChanged($scope,function(row){
+                var msg = 'row selected ' + row.isSelected;
+                $scope.selectedUser = row.entity;
+                $scope.clearMessages();  
+                // TODO these should be chained
+                loadWorkFiles($scope.selectedUser.username);
+                //load the new ones
+                loadJobRuns($scope.selectedUser.username);
+                
+            });
+            //needs to be called to have rows selectable
+            $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.OPTIONS);
+    };
+    $scope.singleFilter = function( renderableRows ){
+        var ddd = $scope.bsObj.selectedGroup.name;
+        var matcher = new RegExp(ddd);
+        renderableRows.forEach( function( row ) {
+            var match = false;
+            row.entity.groups.forEach(function(gname){
+                if(gname == ddd || ddd == "All Groups"){
+                    match = true;
+                }
+            });
+            if ( !match ){
+                row.visible = false;
+            }
+        });
+        return renderableRows;
+    };
+    $scope.filter = function() {
+        $scope.gridApi.grid.refresh();
+    };
+    
+    
     // from http://scratch99.com/web-development/javascript/convert-bytes-to-mb-kb/
     function bytesToSize(bytes) {
         var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -118,8 +187,9 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             if (jobRuns.length == 0){
                 return; 
             }
-            $scope.earliestJobRunDate = new Date(jobRuns[0].runDatetime);
-            $scope.latestJobRunDate = new Date(jobRuns[0].runDatetime);
+            // safe early and latest dates
+            $scope.earliestJobRunDate = new Date();
+            $scope.latestJobRunDate = new Date(1934, 10, 30);
             $scope.aveJobRunDuration = 0;
             $scope.longestJobRunDuration = 0;
             var totalDuration = 0; 
@@ -155,6 +225,7 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             controller: 'UserGroupModalController'
         });
         modalInstance.result.then(function (response) {
+            $scope.loadUserGroups()
             console.log(response);
         }, function () {
             console.log('Modal dismissed at: ' + new Date());
@@ -177,15 +248,18 @@ usersController.controller('UsersCtrl', ['$scope','$sortService','$http','$modal
             console.log('Modal dismissed at: ' + new Date());
         });
     };
+    var initUsers = function(){
+        $scope.loadAllUsers();
+    }
+    initUsers();
 
-
-
+// dont really need this any more -- just delete?
 $scope.$watch('selectedUser', function(newValue, oldValue){
     // only make the call if the selectedUser has a length of at least 1
     // its an array so just make sure its not empty
     // AND ensure that the change is due to a grid click -- otherwise this will
     // trigger when user fields are edited
-    if ($scope.selectedUser.length > 0 && newValue[0].username != oldValue[0].username) {
+    if ($scope.selectedUser.length > 0 && (oldValue.length == 0 || newValue[0].username != oldValue[0].username)) {
         // set to viewing
         $scope.viewing = true;
         $scope.editing = false;

@@ -1,0 +1,17 @@
+<div class="panel panel-primary">
+  			<div class="panel-heading">
+  				<h3 class="panel-title">Groups</h3>
+  				<div class="btn-group pull-right">
+    			<input type="button" class="btn btn-success" ng-click="createGroup();clearMessages()" value="New Group">
+    			</div>
+    			<div class="clearfix"></div>
+  			</div>
+  			<div  class="panel-body">
+  			<table class="table">
+  				<th>Group Name</th>
+  				<tbody  ng-repeat="gr in userGroups">
+  				  <tr><td>{{gr.name}}</td></tr>
+  				</tbody>
+  			</table>
+  			</div>
+	</div>

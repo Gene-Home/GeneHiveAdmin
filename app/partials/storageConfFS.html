@@ -1,0 +1,67 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<div class="page-header">
+	<h2 ng-show="(action=='editing')">Storage Locations/{{newLoc.name}}</h2>
+    	<h2 ng-show="(action=='creating')">Storage Locations/New FS</h2>
+  	</div>
+  	<div class="alert alert-danger alert-dismissible" role="alert" ng-show="errorMessage">
+  		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  			<span aria-hidden="true">&times;</span>
+  		</button>
+  		<strong>{{errorMessage}}</strong>
+  	</div>
+<form ><fieldset>
+            <div class="form-group">
+                <label class="control-label" for="first">Storage Location Name:</label>
+                <input type="text" name="name" id="name" class="form-control" ng-model="newLoc.name" ng-disabled=(action=='editing')>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="last">Directory</label>
+                <input type="text" name="bucket" id="bucket" class="form-control" ng-model="newLoc.parameters.directory">
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="last">Default Priority</label>
+                <input type="text" name="defaultPriority" id="defaultPriority" class="form-control" ng-model="newLoc.defaultPriority">
+            </div>
+            <div class="form-group" >
+                <label class="control-label" for="permissions">Permissions:</label><br/>
+                <label>
+    				<input type="radio" ng-model="newLoc.perm" value="none">
+    					Only Super Users Can Use Location
+  					</label><br/>
+  				<label>
+    				<input type="radio" ng-model="newLoc.perm" value="group">
+    					Only Users in Group Can Use Location
+  				</label><br/>
+  				<label>
+    				<input type="radio" ng-model="newLoc.perm" value="other">
+    					Everyone Can Use Location
+  					</label><br/>
+            </div>
+            
+            <div class="form-group">
+            	<label class="control-label" for="group">Group</label>
+            	<ui-select  ng-model ="newLoc.group" theme="bootstrap" on-select="filter()">
+          			<ui-select-match placehold = "Select Group or Blank for Default">
+            			<span ng-bind="$select.selected.name"></span>
+          			</ui-select-match>
+          			<ui-select-choices repeat="g in userGroups track by g.name">
+            			<span ng-bind="g.name"></span>
+          			</ui-select-choices>
+        		</ui-select>
+
+    		</div>
+       
+            <div class="form-group">
+                <button type="button" class="btn btn-primary"  ng-click="saveLocation()" ng-disabled="saving">
+                	<span ng-show="saving">Saving <i class="glyphicon glyphicon-refresh spinning"></i></span>
+                	<span ng-show="!saving"><i class="glyphicon glyphicon-save"></i>Save</span>
+                </button>
+                <button type="button" class="btn btn-primary"  ng-click="listStorageLocations()" ng-disabled="saving">Cancel
+
+                </button>
+            </div>
+</fieldset></form>
+</div>
+
+
+

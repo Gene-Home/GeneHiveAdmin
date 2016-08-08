@@ -1,0 +1,14 @@
+{
+  "name": "GeneHiveAdmin",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Gene-Home/GeneHiveAdmin",
+  "authors": [
+    "David Ulrich <ghdulrich@gmail.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "angular-ui-select": "~0.18.1",
+    "angular-sanitize": "~1.5.8",
+    "angular-ui-grid": "~3.2.1"
+  }
+}

@@ -1,0 +1,63 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+ <div class="page-header">
+ 	<div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary"  ng-click="addS3Location()">Add New S3</button>
+         <button type="button" class="btn btn-primary"  ng-click="addFSLocation()">Add New Local</button>
+    </div>
+    <h2>Storage Locations</h2>
+    <div class="alert alert-success" role="alert" ng-show="successMessage">
+    	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  			<span aria-hidden="true">&times;</span>
+  		</button>
+  		<strong>{{successMessage}}</strong>
+  	</div>	
+  </div>
+  		<h4>Local Storage</h4>
+		<table class="table table-striped">
+			<thead>
+            	<tr>
+				<th>Name</th><th>Group</th><th>Default Priority</th><th>Permissions</th><th>Directory</th><th></th>
+			</tr>
+			</thead>
+			<tr ng-repeat="lc in localLocs">
+				<td>{{lc.name}}</td>
+				<td>{{lc.group}}</td>
+				<td>{{lc.defaultPriority}}</td>
+				<td>{{lc.permissions}}</td>
+				<td>{{lc.parameters.directory}}</td>
+				<td>
+					<button type="button" class="btn btn-success btn-sm" ng-click="editLocation(lc.idx)" >
+          				<span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+        			</button>
+        			<button type="button" class="btn btn-danger btn-sm" ng-click="deleteLocation(lc.idx)" >
+          				<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
+        			</button>
+				</td>
+			</tr>
+		</table>	
+		
+		<h4> S3 Storage</h4>
+		<div class="clearfix"></div>
+		<table class="table table-striped">
+			<thead>
+            	<tr>
+				<th>Name</th><th>Group</th><th>Default Priority</th><th>Permissions</th><th>Bucket</th><th></th>
+				</tr>
+			</thead>
+			<tr ng-repeat="s in s3Locs">
+				<td>{{s.name}}</td>
+				<td>{{s.group}}</td>
+				<td>{{s.defaultPriority}}</td>
+				<td>{{s.permissions}}</td>
+				<td>{{s.parameters.bucket}}</td>
+				<td>
+					<button type="button" class="btn btn-success btn-sm" ng-click="editLocation(s.idx)" >
+          				<span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
+        			</button>
+        			<button type="button" class="btn btn-danger btn-sm" ng-click="deleteLocation(s.idx)" >
+          				<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
+        			</button>
+				</td>
+			</tr>
+		</table>
+</div>

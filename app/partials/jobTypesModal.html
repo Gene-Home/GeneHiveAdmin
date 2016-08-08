@@ -1,0 +1,17 @@
+<div class="modal-fade">
+    <div class="modal-dialog">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="cancel()">&times;</button>
+          <h4 class="modal-title">Job Type's JSON def</h4>
+        </div>
+        <div class="modal-body">
+        	<pre>
+        	{{ jobTypeDef | json}}
+        	</pre>
+        </div>
+         <div class="modal-footer">
+            <button ng-show="successCreate" class="btn btn-primary" ng-click="ok()">OK</button>
+            <button ng-show="! successCreate"class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>
+</div>   

@@ -1,0 +1,23 @@
+<div class="modal-fade">
+    <div class="modal-dialog">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="cancel()">&times;</button>
+          <h4 class="modal-title">Delete Location {{locName}}</h4>
+        </div>
+        <div class="modal-body">
+            <div ng-show="errorMessage" class="alert alert-danger">
+                {{errorMessage}}
+            </div>
+            <div ng-show="successMessage" class="alert alert-success">
+                {{successMessage}}
+            </div>
+
+        </div>
+        <p>Deleting this may have repercussions!
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="deleteLocations()">Del</button>
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button  class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>          
+    </div>
+</div>
