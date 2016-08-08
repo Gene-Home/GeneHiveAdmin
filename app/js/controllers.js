@@ -159,7 +159,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
     toSave['template-user-confirm-url-body'] = 
       $scope.sysConf['template-user-confirm-url-body'];
         
-    $http({method: 'POST', data:toSave,url: '/GeneHive/api/v2/Configuration'}).
+    $http({method: 'POST', data:toSave,url: '/hive/v2/Configuration'}).
       success(function(data, status, headers, config) {
         $scope.updateLoginConfSuccess = true;
       }).
@@ -179,7 +179,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
     toSave['mail.smtp.from'] = $scope.sysConf['mail.smtp.from'];
     toSave['mail.smtp.starttls.enable'] = $scope.sysConf['mail.smtp.starttls.enable'];
 
-    $http({method: 'POST', data:toSave,url: '/GeneHive/api/v2/Configuration'}).
+    $http({method: 'POST', data:toSave,url: '/hive/v2/Configuration'}).
         success(function(data, status, headers, config) {
             $scope.updateSmtpConfSuccess = true;
         }).
@@ -189,14 +189,21 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
         });
     };
   var getExeLocation = function(){
-     $http({method: 'GET', url: '/GeneHive/api/v2/ExecutionLocations'}).
+     $http({method: 'GET', url: '/hive/v2/ExecutionLocations'}).
         success(function(data, status, headers, config) {
           $scope.exeLocations = data;
         }).
         error(function(data, status, headers, config) {})
-  }  
+  };
+  var getStorageLocations = function(){
+    $http({method: 'GET', url: '/hive/v2/WorkFileStorage/?parameters=true'}).
+        success(function(data, status, headers, config) {
+          $scope.storageLocations = data;
+        }).
+        error(function(data, status, headers, config) {})
+  };  
   var getConf = function(){
-     $http({method: 'GET', url: '/GeneHive/api/v2/Configuration'}).
+     $http({method: 'GET', url: '/hive/v2/Configuration'}).
         success(function(data, status, headers, config) {
         // this callback will be called asynchronously
         // when the response is available
@@ -227,7 +234,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
       $scope.sending = true;  
       $scope.testResultsSuccess = null;
       $scope.testResultsError = null;
-      $http({method: 'POST', data: $scope.sysConf,url: '/GeneHive/api/v2/MailTest'}).
+      $http({method: 'POST', data: $scope.sysConf,url: '/hive/v2/MailTest'}).
         success(function(data, status, headers, config) {
             $scope.sending = false;
             $scope.testResultsSuccess = data;
@@ -251,6 +258,33 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
           }
 
 ]);
+geneHiveControllers.controller('StorageConfModalController', function modalController ($scope, $modalInstance,StorageLocation,locationName) {
+    
+    $scope.locName = locationName;
+    $scope.deleteLocations = function(){
+      StorageLocation.delete({wfsName:$scope.locName},{}).$promise.then(
+        function(message){
+          $scope.errorMessage = null;
+          // its odd, if we use the retured message, its an array .. hmm
+          //$scope.successMessage = message;
+          $scope.successMessage = "Successfully Remove Location: " + locationName 
+        },
+        function(message){
+          $scope.errorMessage = "Error Removing Location: " + message.data;
+        }    
+      )
+    }
+
+    $scope.ok = function () {
+
+        $modalInstance.close('delete');
+        console.log('ok');
+    };
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+        console.log('cancel');
+    };
+});
 geneHiveControllers.controller('UserModalController', function modalController ($scope, $modalInstance,User,userGroups) {
     
     $scope.newUser = {};

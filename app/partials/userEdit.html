@@ -1,0 +1,75 @@
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  
+  <div class="row">
+   <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="" ng-click="clearMessages();listUsers()">Users</a></li>
+      <li class="breadcrumb-item active">{{user.username}}</li>
+     
+    </ol>
+    </div>
+        <div ng-show="successMessage" class="alert alert-success">
+          {{successMessage}}
+    </div>
+    <div ng-show="errorMessage" class="alert alert-danger">
+          {{errorMessage}}
+    </div>
+    <span class="panel-title section-title">Edit User:&nbsp;{{selectedUser.username}}</span>
+    <form role="form">
+		  <div class="form-group col-xs-4">
+			 <label>First Name </label>
+			 <input class="form-control" type="text" ng-model="user.firstName" >
+			</div>
+			<div class="form-group col-xs-4">
+				<label>Last Name</label>
+				<input class="form-control" type="text" ng-model="user.lastName">
+			</div>
+			<div class="form-group col-xs-4">
+			 <label>Email</label>
+				<input class="form-control" type="email" ng-model="user.email" >
+			</div>
+			<div class="form-group col-xs-4">
+        <label>Groups (first in list will be default!)</label>
+        <ui-select multiple theme="bootstrap" ng-model="bsObj.editedUserGroups">
+          <ui-select-match placeholder="Select groups...">
+            <span ng-bind="select.selected"></span>{{$item.name}}
+          </ui-select-match>
+          <ui-select-choices repeat="g in (userGroups | filter: select.search) track by g.name ">
+            <span ng-bind="g.name"></span>
+          </ui-select-choices>
+        </ui-select> 
+
+			</div>
+					<div  class="form-group col-xs-4">
+    					<label>Super User</label>
+    					<ui-select theme="bootstrap" ng-model="user.superuser">
+                  <ui-select-match>
+                        {{$select.selected}}
+                    </ui-select-match>
+            				<ui-select-choices repeat="g in ['true','false']">
+              					{{g}}
+            				</ui-select-choices>
+          		</ui-select>
+  					</div>
+  					<div class="form-group col-xs-4">
+    					<label>Active </label>
+    			 		<ui-select theme="bootstrap" ng-model="user.active">
+                <ui-select-match>
+                        {{$select.selected}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="g in ['true','false']">
+                        {{g}}
+                    </ui-select-choices>
+              </ui-select>
+  					</div>
+  					
+					<input type="button" class="btn btn-primary" ng-click="updateUser()" value ="Update User">
+					<input  type="button" class="btn" ng-click="clearMessages();listUsers()" value ="Cancel">
+					 <!-- debugging
+					 <pre>selu = {{selectedUser[0] | json }}</pre>
+					 <pre>u = {{user | json}}</pre>
+					 -->
+				</div>
+			</form>
+		</div>
+	</div>

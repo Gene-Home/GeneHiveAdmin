@@ -1,115 +1,81 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	<div class="panel panel-primary">
-    <div class="panel-heading">
-  		 <span class="panel-title section-title">User Details For:&nbsp;{{selectedUser[0].username}}</span>
-    		<div class="btn-group pull-right">
-    			<button ng-show="viewing" type="button" class="btn btn-success btn-sm" ng-click="editUser();editing=true;viewing=false;clearMessages()">
-            <span class="glyphicon glyphicon-edit"></span>&nbsp;Edit User
-          </button>
-    		</div>
-    		<div class="clearfix"></div>
-    	</div>
-  			<div ng-show="successMessage" class="alert alert-success">
-  				{{successMessage}}
-			</div>
-			<div ng-show="errorMessage" class="alert alert-danger">
-  				{{errorMessage}}
-			</div>
-  			
-  			<div class="panel-body">
-				<form role="form">
-					<div class="form-group col-xs-4">
-						<label>First Name </label>
-						<input ng-show = "editing" class="form-control" type="text" ng-model="user.firstName" >
-						<div ng-show = "viewing">{{selectedUser[0].firstName}}</div>
-					</div>
-					<div class="form-group col-xs-4">
-						<label>Last Name</label>
-						<input ng-show = "editing"  class="form-control" type="text" ng-model="user.lastName">
-						<div ng-show = "viewing">{{selectedUser[0].lastName}}</div>	
-					</div>
-					<div class="form-group col-xs-4">
-						<label>Email</label>
-						<input  ng-show = "editing" class="form-control" type="email" ng-model="user.email" >
-						<div ng-show = "viewing">{{selectedUser[0].email}}</div>
-					</div>
-					<div class="form-group col-xs-4">
-						<label>Group</label>
-						<input  ng-show ="editing" class="form-control" type="text" ng-model="user.group" disabled >
-  						<div ng-show="viewing">{{selectedUser[0].group}}</div>
-					</div>
-					<div  class="form-group col-xs-4">
-    					<label>Super User</label>
-    					<select ng-show = "editing" class="form-control" ng-model="user.superuser">
-            				<option ng-repeat="g in ['true','false']" value="{{g}}">
-              					{{g}}
-            				</option>
-          				</select>
-          				<div ng-show = "viewing">{{selectedUser[0].superuser}} </div>
-  					</div>
-  					<div class="form-group col-xs-4">
-    					<label>Active </label>
-    			 		<select class="form-control" ng-model="user.active" ng-show = "editing" >
-            				<option ng-repeat="g in ['true','false']" value="{{g}}">
-              					{{g}}
-            				</option>
-          				</select>
-          				<div ng-show = "viewing">{{selectedUser[0].active}} </div>	
-  					</div>
-  					<div class="form-group col-xs-6 " ng-style="{opacity: (!workFilesLoaded && .4) }">
-  						<h4>File Usage</h4>
-  						<ul >
-							<li>File Count: {{workFiles.length | number}}</li>
-							<li>Total Size: {{totalFileSize}}</li>
-							<li>Largest File: {{largestFileSize}}</li>
-						</ul>
-  					</div>
-  					<div class="form-group col-xs-6" ng-style="{opacity: (!jobRunsLoaded && .4) }">
-  						<h4>Job Runs</h4>
-  						<ul>
-							<li>Total Job Runs: {{jobRuns.length | number }}</li>
-							<li>Eariliest Job Run: {{earliestJobRunDate  | date:'medium'}}</li>
-							<li>Most Recent Job Run: {{latestJobRunDate  | date:'medium'}}</li>
-							<li>Average Job Run Duration: {{aveJobRunDuration / 3600000 | number:2}} hrs</li>
-							<li>Longest Job Run Duration: {{longestJobRunDuration / 3600000 | number:1}} hrs</li>
-						</ul>
-  					</div> 
-  					<div class=" form-group col-xs-6">
-					<input ng-show = "editing" type="button" class="btn btn-primary" ng-click="updateUser()" value ="Update User">
-					<input ng-show = "editing" type="button" class="btn" ng-click="editing=false;viewing=true;clearMessages()" value ="Cancel">
-					 <!-- debugging
-					 <pre>selu = {{selectedUser[0] | json }}</pre>
-					 <pre>u = {{user | json}}</pre>
-					 -->
-				</div>
-			</form>
-		</div>
-	</div> 
-	
-	<div class="panel panel-primary">
-  			<div class="panel-heading">
-    		  <span class="panel-title section-title">Users&nbsp;</span>
-          <span class="section-toolbar">
-          </span>
-          <span class="pull-right">
-            <button type="button" class="btn btn-success btn-sm" ng-click="createUser();clearMessages()">
-              <span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh
-            </button>
-            <button type="button" class="btn btn-success btn-sm" ng-click="createUser();clearMessages()">
-              <span class="glyphicon glyphicon-plus"></span>&nbsp;Add User
-            </button>  
-          </span>
-        	<div class="clearfix"></div>
-  			</div>
-  			
-  			<div class="panel-body">
-  			<div class="input-group col-xs-4" style="padding-bottom:25px;">
-    			<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-    				<input class="form-control" type="text" ng-model="filterOptions.filterText"  placeholder="Search" >
-    		</div>
-				<div style="width: 100%;height: 400px;" ng-grid="gridOptions"></div>
-			</div>
-	</div>
+
+  <ol class="breadcrumb">
+     <li class="active">Users</a></li>
+  </ol>		  			
+  <div class="row">  
+    <div class="col-xs-12 col-sm-4">
+      <h3>User Details for: {{selectedUser.username}} 
+        <button type="button" ng-show ="selectedUser.username" ng-click="editUser(row.getProperty(col.field))">Edit
+        </button>
+      </h4>
+      <ul class="list-unstyled">
+        <li><b>Username: </b><div class="pull-right">{{selectedUser.username}}</div></li>
+        <li><b>First Name: </b><div class="pull-right">{{selectedUser.firstName}}</div></li>
+        <li><b>Last Name: </b><div class="pull-right">{{selectedUser.lastName}}</div></li>
+        <li><b>Email: </b><div class="pull-right">{{selectedUser.email}}</div></li>
+        <li><b>Groups: </b><i ng-repeat = "gr in selectedUser.groups" > {{gr}} </i></li>
+        <li><b>Default Group: </b><div class="pull-right">{{selectedUser.group}}</div></li>
+        <li><b>Super User: </b><div class="pull-right">{{selectedUser.superuser}}</div></li>
+        <li><b>Active: </b><div class="pull-right">{{selectedUser.active}}</div></li>
+      </ul> 
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h3>File Usage</h3>
+      <ul class="list-unstyled">
+        <li><b>File Count: </b><div class="pull-right">{{workFiles.length | number}}</div></li>
+        <li><b>Total Size: </b><div class="pull-right">{{totalFileSize}}</div></li>
+        <li><b>Largest File: </b><div class="pull-right">{{largestFileSize}}</div></li>
+      </ul>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h3>Job Runs</h3>
+        <ul class="list-unstyled">
+          <li><b>Total Job Runs: </b><div class="pull-right">{{jobRuns.length | number }}</div></li>
+          <li><b>Eariliest Job Run: </b><div class="pull-right">{{earliestJobRunDate  | date:'medium'}}</div></li>
+          <li><b>Most Recent Job Run: </b><div class="pull-right">{{latestJobRunDate  | date:'medium'}}</div></li>
+          <li><b>Average Job Run Duration: </b><div class="pull-right">{{aveJobRunDuration | number:0}} ms</div></li>
+          <li><b>Average Job Run Duration: </b><div class="pull-right">{{aveJobRunDuration / 3600000 | number:2}} hrs</div></li>
+          <li><b>Longest Job Run Duration: </b><div class="pull-right">{{longestJobRunDuration / 3600000 | number:1}} hrs</div></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div style="padding-bottom:35px;">
+      <div class="col-xs-12 col-sm-4">
+        <ui-select  ng-model ="bsObj.selectedGroup" theme="bootstrap" on-select="filter()">
+          <ui-select-match placeholder="Filter by Group">
+            <span ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="g in userGroups track by g.name">
+            <span ng-bind="g.name"></span>
+          </ui-select-choices>
+          <option value="add">All Groups</option>
+        </ui-select>
+      </div>
+      <div class="col-xs-12 col-sm-8">
+        <div class="btn-group pull-right">  
+        <button type="button" class="btn btn-success btn-sm" ng-click="loadAllUsers();clearMessages()">
+          <span class="glyphicon glyphicon-refresh"></span>&nbsp;Refresh
+        </button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="createUser();clearMessages()">
+          <span class="glyphicon glyphicon-plus"></span>&nbsp;Add User
+        </button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="createGroup();clearMessages()">
+          <span class="glyphicon glyphicon-plus"></span>&nbsp;Add Group
+        </button> 
+        </div>
+      </div>
+      
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12 col-sm-12">
+		  <div style="width: 100%;height: 400px;" ui-grid="gridOptions" ui-grid-selection></div>
+    </div>
+  </div>
+</div>
+  
+<!--
 	<div class="panel panel-primary">
   			<div class="panel-heading">
   				<h3 class="panel-title">Groups</h3>
@@ -127,9 +93,6 @@
   			</table>
   			</div>
 	</div>
- 
-		
-			</div>
-		</div>	
-	</div>	
-</div>
+ -->
+			
+
