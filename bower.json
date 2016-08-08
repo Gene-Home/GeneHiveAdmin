@@ -7,8 +7,14 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "angular": "~1.5.8",
+    "angular-route": "~1.5.8",
+    "angular-resource": "~1.5.8",
     "angular-ui-select": "~0.18.1",
     "angular-sanitize": "~1.5.8",
-    "angular-ui-grid": "~3.2.1"
+    "angular-ui-grid": "~3.2.1",
+    "bootstrap":"~3.3.7",
+    "angular-bootstrap":"~1.1.0",
+    "angular-ui-router": "~0.2.14"
   }
 }

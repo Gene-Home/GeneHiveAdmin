@@ -8,15 +8,15 @@
 
 var geneHiveControllers = angular.module('geneHiveControllers', []);
 
-geneHiveControllers.controller('TestEmailController',['$scope','$modalInstance',function modalController ($scope, $modalInstance){
+geneHiveControllers.controller('TestEmailController',['$scope','$uibModalInstance',function modalController ($scope, $uibModalInstance){
   
   
     $scope.ok = function () {
-        $modalInstance.close({'newUser': $scope.newUser});
+        $uibModalInstance.close({'newUser': $scope.newUser});
         console.log('ok');
     };
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         console.log('cancel');
     };
   }]
@@ -24,7 +24,7 @@ geneHiveControllers.controller('TestEmailController',['$scope','$modalInstance',
 
 
 geneHiveControllers.controller('ClassModalController', 
-  function modalController($scope,$modalInstance,EntityClass,entityClass,entityClasses,isCreating){
+  function modalController($scope,$uibModalInstance,EntityClass,entityClass,entityClasses,isCreating){
     $scope.isCreating = isCreating;
     $scope.newClass = entityClass;
     $scope.newVariable = {};
@@ -98,17 +98,17 @@ geneHiveControllers.controller('ClassModalController',
       )
     }; //end createClass
     $scope.ok = function () {
-        $modalInstance.close({'newClass': $scope.newClass});
+        $uibModalInstance.close({'newClass': $scope.newClass});
         console.log('ok');
     };
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         console.log('cancel');
     };
   }
 )// end ClassModalController
 
-geneHiveControllers.controller('UserGroupModalController', function modalController ($scope, $modalInstance,UserGroup) {
+geneHiveControllers.controller('UserGroupModalController', function modalController ($scope, $uibModalInstance,UserGroup) {
     $scope.newGroup = {};
     $scope.successCreate = false; 
     $scope.createGroup = function(){
@@ -125,16 +125,16 @@ geneHiveControllers.controller('UserGroupModalController', function modalControl
       )
     }; //end create Group
     $scope.ok = function () {
-        $modalInstance.close({'newGroup':$scope.newGroup});
+        $uibModalInstance.close({'newGroup':$scope.newGroup});
         console.log('ok');
     };
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         console.log('cancel');
     };
 });
 
-geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function($scope,$http,$modal) {
+geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$uibModal',function($scope,$http,$uibModal) {
 
   $scope.sysConf = {};
   $scope.updateLoginConf = function(){
@@ -258,7 +258,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$modal',function
           }
 
 ]);
-geneHiveControllers.controller('StorageConfModalController', function modalController ($scope, $modalInstance,StorageLocation,locationName) {
+geneHiveControllers.controller('StorageConfModalController', function modalController ($scope, $uibModalInstance,StorageLocation,locationName) {
     
     $scope.locName = locationName;
     $scope.deleteLocations = function(){
@@ -277,15 +277,15 @@ geneHiveControllers.controller('StorageConfModalController', function modalContr
 
     $scope.ok = function () {
 
-        $modalInstance.close('delete');
+        $uibModalInstance.close('delete');
         console.log('ok');
     };
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         console.log('cancel');
     };
 });
-geneHiveControllers.controller('UserModalController', function modalController ($scope, $modalInstance,User,userGroups) {
+geneHiveControllers.controller('UserModalController', function modalController ($scope, $uibModalInstance,User,userGroups) {
     
     $scope.newUser = {};
     $scope.userGroups = userGroups;
@@ -304,17 +304,17 @@ geneHiveControllers.controller('UserModalController', function modalController (
       )
     }; //end createUser
     $scope.ok = function () {
-        $modalInstance.close({'newUser': $scope.newUser});
+        $uibModalInstance.close({'newUser': $scope.newUser});
         console.log('ok');
     };
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         console.log('cancel');
     };
 });
 
 
-geneHiveControllers.controller('UserGroupModalController', function modalController ($scope, $modalInstance,UserGroup) {
+geneHiveControllers.controller('UserGroupModalController', function modalController ($scope, $uibModalInstance,UserGroup) {
     
     $scope.newGroup = {};
     $scope.successCreate = false; 
@@ -332,11 +332,11 @@ geneHiveControllers.controller('UserGroupModalController', function modalControl
       )
     }; //end create Group
     $scope.ok = function () {
-        $modalInstance.close({'newGroup':$scope.newGroup});
+        $uibModalInstance.close({'newGroup':$scope.newGroup});
         console.log('ok');
     };
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         console.log('cancel');
     };
 });

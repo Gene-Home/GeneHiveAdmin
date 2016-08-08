@@ -1,8 +1,8 @@
 var jobTypesController = angular.module('geneHive.JobTypesController', []);
 
 
-jobTypesController.controller('JobTypesCtrl', ['$scope','$http','$modal', 'JobType','uiGridConstants',
-					 function($scope,$http,$modal,JobType,uiGridConstants) {
+jobTypesController.controller('JobTypesCtrl', ['$scope','$http','$uibModal', 'JobType','uiGridConstants',
+					 function($scope,$http,$uibModal,JobType,uiGridConstants) {
 
  $scope.selectedJobTypes = [];
  $scope.selectedJobType = {};
@@ -74,7 +74,7 @@ $scope.loadJobTypes = function(){
 
 };
 $scope.showJSON = function (jobTypeDef) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partials/jobTypesModal.html',
             controller: 'JobTypesModalController',
             resolve: {
@@ -104,16 +104,16 @@ $scope.showJSON = function (jobTypeDef) {
 /*
 * Controller for the job type modal
 */
-jobTypesController.controller('JobTypesModalController', function modalController ($scope, $modalInstance,jobTypeDef) {
+jobTypesController.controller('JobTypesModalController', function modalController ($scope, $uibModalInstance,jobTypeDef) {
 
     $scope.jobTypeDef = jobTypeDef;
     var x = 45;
     $scope.ok = function () {
-        $modalInstance.close();
+        $uibModalInstance.close();
         console.log('ok');
     };
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
         console.log('cancel');
     };
 });

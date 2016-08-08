@@ -1,7 +1,7 @@
 var entityClassesController = angular.module('geneHive.EntityClassesController', []);
 
-entityClassesController.controller('EntityClassesCtrl',['$scope','$http','$modal','uiGridConstants','EntityClass',
-	function($scope,$http,$modal,uiGridConstants,EntityClass) {
+entityClassesController.controller('EntityClassesCtrl',['$scope','$http','$uibModal','uiGridConstants','EntityClass',
+	function($scope,$http,$uibModal,uiGridConstants,EntityClass) {
 
 		$scope.selectedEntityClasses = [];
 		var columnDefs=[
@@ -45,7 +45,7 @@ entityClassesController.controller('EntityClassesCtrl',['$scope','$http','$modal
     	//GridService.initGrid($scope, $sortService, EntityClass,$scope.selectedEntityClasses,columnDefs).then($scope.loadClasses);
         
     	$scope.editClass = function (modalName) {
-        	var modalInstance = $modal.open({
+        	var modalInstance = $uibModal.open({
             	templateUrl: 'partials/newClassModal.html',
             	controller: 'ClassModalController',
             	resolve: {
@@ -62,7 +62,7 @@ entityClassesController.controller('EntityClassesCtrl',['$scope','$http','$modal
 			})
 		};// end createClass
         $scope.createClass = function (modalName) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'partials/newClassModal.html',
                 controller: 'ClassModalController',
                 resolve: {

@@ -1,8 +1,8 @@
 var usersController = angular.module('geneHive.UsersController', []);
 
 
-usersController.controller('UsersCtrl', ['$scope','$http','$modal', 'User','WorkFile','UserGroup','JobRun','uiGridConstants',
-					 function($scope,$http,$modal,User,WorkFile,UserGroup,JobRun, uiGridConstants) {
+usersController.controller('UsersCtrl', ['$scope','$http','$uibModal', 'User','WorkFile','UserGroup','JobRun','uiGridConstants',
+					 function($scope,$http,$uibModal,User,WorkFile,UserGroup,JobRun, uiGridConstants) {
 
     
     // default to the listing view
@@ -220,7 +220,7 @@ usersController.controller('UsersCtrl', ['$scope','$http','$modal', 'User','Work
 // modal stuff
 
     $scope.createGroup = function (modalName) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partials/newGroupModal.html',
             controller: 'UserGroupModalController'
         });
@@ -232,7 +232,7 @@ usersController.controller('UsersCtrl', ['$scope','$http','$modal', 'User','Work
         });
     };
     $scope.createUser = function (modalName) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partials/newUserModal.html',
             controller: 'UserModalController',
             resolve: {

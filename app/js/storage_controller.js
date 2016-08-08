@@ -1,7 +1,7 @@
 var storageController = angular.module('geneHive.StorageController', []);
 
-storageController.controller('StorageConfCtrl', ['$scope','$http', '$modal','StorageLocation','uiGridConstants','UserGroup',
-					 function($scope,$http,$modal,StorageLocation,uiGridConstants,UserGroup) {
+storageController.controller('StorageConfCtrl', ['$scope','$http', '$uibModal','StorageLocation','uiGridConstants','UserGroup',
+					 function($scope,$http,$uibModal,StorageLocation,uiGridConstants,UserGroup) {
 
 	    // default to the listing view
     $scope.subview = 'list';
@@ -49,7 +49,7 @@ storageController.controller('StorageConfCtrl', ['$scope','$http', '$modal','Sto
         })
     };
     $scope.deleteLocation = function (locIdex) {
-        var modalInstance = $modal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'partials/storageConfDeleteModal.html',
             controller: 'StorageConfModalController',
             resolve: {

@@ -27,7 +27,7 @@ config(['$routeProvider', function($routeProvider) {
 }]);
 */
 angular.module('geneHiveAdmin', [
-  'ngRoute',
+  
   'ui.router',
   'ui.bootstrap',
   'ui.grid',
