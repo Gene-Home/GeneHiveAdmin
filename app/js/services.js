@@ -1,6 +1,6 @@
 
 /* Services */
-var api_url = '/hive/v2/';
+var api_url = 'http://localhost:8080/hive/v2/';
 var geneHiveServices = angular.module('geneHiveServices', ['ngResource']);
 
 geneHiveServices.factory('WorkFile',['$resource',

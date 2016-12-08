@@ -1,0 +1,57 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+  <ol class="breadcrumb">
+     <li class="active">Entity Search X</a></li>
+  </ol>
+
+  <div class="row">
+  	<div class="form-group col-xs-4">
+     <label>Search For:</label>
+    	
+      <ui-select theme="bootstrap" ng-model="search.selectedEntityClass" on-select="onSearchEntitySelected($item, $model)">
+        <ui-select-match>
+          {{$select.selected.name}}
+        </ui-select-match>
+        <ui-select-choices repeat="ent in (entityClasses | filter: $select.search)">
+          {{ent.name}}
+        </ui-select-choices>
+      </ui-select> 
+      <label>Search by {{search.selectedEntityClass.name}} ID</label>
+      <input type="text" class="form-control">
+    
+        <input type="button" class="btn btn-primary" ng-click="searchEntity()" value ="Search">
+	</div>
+  <div class="form-group col-xs-4">
+    
+    <label>Search by Field</label>
+    <ui-select theme="bootstrap" ng-model="search.classfield" on-select="loadDistinctValues()">
+        <ui-select-match>
+          {{$select.selected}}
+        </ui-select-match>
+        <ui-select-choices repeat="f in (search.classfields | filter: $select.search)">
+          {{f}}
+        </ui-select-choices>
+      </ui-select>
+      <label>Field {{search.selectedEntityClass.name}} ID</label>
+      <input type="text" class="form-control" ng-model="search.classFieldSearchFor">
+      <label ng-repeat="d in distinctVals" >{{d}}&nbsp</label>  
+  </div>
+	 <div class="clearfix"></div>
+    <div class="col-xs-12 col-sm-12">
+		  <table class="table table-bordered">
+      <tr ng-repeat="ent in entityResults">
+        <td>
+          Created On:{{ent._creation_date}}
+          Last Updated:{{ent._last_updated}}
+          
+        <div ng-repeat="(key, value) in ent">
+        {{key}}--{{value}}
+        </div>
+
+        
+        </td>
+      <tr>  
+      </table>
+    </div>
+  </div>
+ </div> 

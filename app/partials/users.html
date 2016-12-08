@@ -2,10 +2,11 @@
 
   <ol class="breadcrumb">
      <li class="active">Users</a></li>
+     <li class="breadcrumb-item active">{{selectedUser.username}}</li>
   </ol>		  			
   <div class="row">  
     <div class="col-xs-12 col-sm-4">
-      <h3>User Details for: {{selectedUser.username}} 
+      <h3>User Details<br /> 
         <button type="button" ng-show ="selectedUser.username" ng-click="editUser(row.getProperty(col.field))">Edit
         </button>
       </h4>
@@ -40,6 +41,7 @@
       </ul>
     </div>
   </div>
+
   <div class="row">
     <div style="padding-bottom:35px;">
       <div class="col-xs-12 col-sm-4">

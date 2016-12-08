@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="css/signin.css">
+<div class="container">
+  			<form ng-show='! reminding' ng-submit="login()" class="form-signin" role="form">
+        		<h2 class="form-signin-heading">Sign In</h2>
+        		<p class="alert alert-danger" ng-show="bad_login">User does not exist or password is incorrect.</p>
+  				<input type="text" class="form-control" placeholder="User" name="token" ng-model="userName" />
+  				<input type="text" class="form-control" placeholder="Password" name="tokens" ng-model="password" />
+  				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign In</button>
+  				<br />
+  				<a ng-click="reminding=true">Forgot Password</a>	
+  			</form>
+  			<form ng-show="reminding" class="form-signin" ng-submit="remindPassword()">
+  			    <p>
+  			    	Please submit your email address and you will be sent instructions on how to reset your password.
+  			    </p>
+  				<input type="text" class="form-control" placeholder="email" ng-model="email" />
+  				<button class="btn btn-primary btn-block" type="submit">Reset Password</button>
+  				<button class="btn btn-primary btn-block" ng-click="reminding=false">Cancel</button>
+  				{{reminding}}
+  			</form>
+</div>

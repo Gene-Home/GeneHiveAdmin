@@ -18,6 +18,10 @@
                             Name is Required</p>
                     </div>
                     <div class="form-group">
+                        <label>Class Description</label>
+                        <input  class="form-control" name="description" type="text" ng-model="newClass.description" >
+                    </div>
+                    <div class="form-group">
                         <table class="table table-striped witdh:80%">
                         <h4>Variables:</h4>
                         <th></th><th>Name</th><th>Type</th><th>Class(if type=E)</th><th>Category</th><th>Codes</th>
@@ -38,7 +42,7 @@
                         <input class="form-control" type="text" ng-model="newVariable.name">
                     </div>
                     <div class="form-group">
-                        <label>Varaibale Categorys</label>
+                        <label>Varaibale Categories</label>
                         <input class="form-control" type="text" ng-model="newVariable.category">
                     </div>
                     <div class="form-group">

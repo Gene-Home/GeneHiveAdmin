@@ -1,0 +1,20 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main ">
+  <div class="panel panel-default">
+  <h3>Execution Locations</h3>
+  <div class="table-responsive">
+    <table class="table table-striped witdh:100">
+      <th>Name</th><th>Host</th><th>Remote Username</th>
+      <th>Poll Delay</th><th>Strategy</th><th>Default</th>
+        <tbody ng-repeat="loc in exeLocations">  
+          <tr>
+            <td>{{loc.name}}</td>
+            <td>{{loc.host}}</td>
+            <td>{{loc.remoteUsername}}</td>
+            <td>{{loc.pollDelay}}</td>
+            <td>{{loc.strategy}}</td>
+            <td>{{loc.default}}</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+</div>
