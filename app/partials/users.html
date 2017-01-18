@@ -1,15 +1,13 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-  <ol class="breadcrumb">
-     <li class="active">Users</a></li>
-     <li class="breadcrumb-item active">{{selectedUser.username}}</li>
-  </ol>		  			
+<div class="page-header">
+  <h2>Users</h2>
+</div>
+ 			
   <div class="row">  
     <div class="col-xs-12 col-sm-4">
-      <h3>User Details<br /> 
-        <button type="button" ng-show ="selectedUser.username" ng-click="editUser(row.getProperty(col.field))">Edit
-        </button>
-      </h4>
+      <h3>User Details <br /> 
+        
+      </h3>
       <ul class="list-unstyled">
         <li><b>Username: </b><div class="pull-right">{{selectedUser.username}}</div></li>
         <li><b>First Name: </b><div class="pull-right">{{selectedUser.firstName}}</div></li>
@@ -19,18 +17,36 @@
         <li><b>Default Group: </b><div class="pull-right">{{selectedUser.group}}</div></li>
         <li><b>Super User: </b><div class="pull-right">{{selectedUser.superuser}}</div></li>
         <li><b>Active: </b><div class="pull-right">{{selectedUser.active}}</div></li>
-      </ul> 
+      </ul>
+      <button type="button" ng-show ="selectedUser.username" class="btn btn-primary"" ng-click="editUser(row.getProperty(col.field))">Edit User
+        </button> 
     </div>
     <div class="col-xs-12 col-sm-4">
       <h3>File Usage</h3>
+      
       <ul class="list-unstyled">
-        <li><b>File Count: </b><div class="pull-right">{{workFiles.length | number}}</div></li>
-        <li><b>Total Size: </b><div class="pull-right">{{totalFileSize}}</div></li>
-        <li><b>Largest File: </b><div class="pull-right">{{largestFileSize}}</div></li>
-      </ul>
+        <li>
+          <b>File Count:</b>
+          <div class="pull-right" ng-show="!workFilesLoaded">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="pull-right" ng-show="workFilesLoaded">{{workFiles.length | number}}</div> 
+        </li>
+        <li><b>Total Size: </b>
+        <div class="pull-right" ng-show="!workFilesLoaded">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <div class="pull-right" ng-show="workFilesLoaded">{{totalFileSize}}</div>
+        </li>
+        <li><b>Largest File:</b>
+        <div class="pull-right" ng-show="!workFilesLoaded">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+        <div class="pull-right" ng-show="workFilesLoaded">{{largestFileSize}}</div></li>
+      </ul> 
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h3>Job Runs</h3>
+      <h3>Job Runs </h3>
         <ul class="list-unstyled">
           <li><b>Total Job Runs: </b><div class="pull-right">{{jobRuns.length | number }}</div></li>
           <li><b>Eariliest Job Run: </b><div class="pull-right">{{earliestJobRunDate  | date:'medium'}}</div></li>

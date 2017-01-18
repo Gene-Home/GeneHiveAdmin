@@ -1,12 +1,31 @@
-
+  
 var sysConfControllers = angular.module('geneHive.SysConfControllers', []);
 
 
-sysConfControllers.controller('executionConfCtrl',['$scope','$http','$uibModal',
-    function($scope,$http,$uibModal){
+sysConfControllers.controller('executionConfCtrl',['$scope','$http','$uibModal','ExeLocation',
+    function($scope,$http,$uibModal,ExeLocation){
 
   $scope.exeLocations = {};
-
+  $scope.subview = 'list';
+  $scope.getInclude = function(){
+      if ($scope.subview == 'list'){
+          return 'partials/executionConfList.html'
+      }else if ($scope.subview == 'new'){
+        return 'partials/executionConfNew.html'
+      }
+    }
+  $scope.listExeLocations = function(){
+      $scope.subview ='list';
+  }
+  $scope.loadLocations = function(){
+    ExeLocation.query(function(locs){
+      $scope.exeLocations = []
+      for (i = 0; i<locs.length; i++){
+        locs[i].idx = i;
+        $scope.exeLocations.push(locs[i]);
+      }
+    })
+  }
   var getExeLocation = function(){
      $http({method: 'GET', url: '/hive/v2/ExecutionLocations'}).
         success(function(data, status, headers, config) {
@@ -14,8 +33,62 @@ sysConfControllers.controller('executionConfCtrl',['$scope','$http','$uibModal',
         }).
         error(function(data, status, headers, config) {})
   };
-  
+  $scope.addExeLocation = function(){
+      $scope.newLoc = {};
+      $scope.successMessage = undefined;
+      $scope.errorMessage = undefined;
+      $scope.action = 'creating';
+      $scope.subview = 'new';
+    };
+  $scope.editLocation = function(locIdex){
+        // editing the currentUser
+        // need to copy first in case of cancel/rollback
+        $scope.newLoc = angular.copy($scope.exeLocations[locIdex]);
+        $scope.successMessage = undefined;
+        $scope.errorMessage = undefined;
+        $scope.action = 'editing';
+        $scope.subview = 'new';
+    };
+  $scope.saveExeLocation = function(){
+     // so we can put a spinner on the button or something
+      $scope.saving = true;
+      if($scope.action == 'creating'){  
+            ExeLocation.save({},$scope.newLoc).$promise.then(
+                function(location){
+                    $scope.errorMessage = null;
+                    $scope.successMessage = "Successfully Created Location: " + location.name;
+                    $scope.newLoc = angular.copy(location,$scope.newLoc);
+                    $scope.saving = false;
+                    // seriously man ... chain these things
+                    $scope.listExeLocations();
+                    $scope.loadLocations()
+                },
+                function(message){
+                    $scope.errorMessage = "Error Creating Location: " + message.data;
+                    $scope.saving = false;
+                }
+            )
+        };
+        if($scope.action == 'editing'){
+          ExeLocation.update({exeLocName:$scope.newLoc.name},$scope.newLoc).$promise.then(
+                function(location){
+                    $scope.errorMessage = null;
+                    $scope.successMessage = "Successfully Updated Location: " + location.name;
+                    $scope.newLoc = angular.copy(location,$scope.newLoc);
+                    $scope.saving = false;
+                    // seriously man ... chain these things
+                    $scope.listExeLocations();
+                    $scope.loadLocations()
+                },
+                function(message){
+                    $scope.errorMessage = "Error Updating Location: " + message.data;
+                    $scope.saving = false;
+                }
+            )  
+        };
 
+    }
+    $scope.loadLocations();
   }]
   );// end 
 

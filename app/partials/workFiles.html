@@ -1,15 +1,115 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-  <div class="row ">
-   
-          <ul>
-              <li>Permissions: {{selectedWorkFile.permissions}}</li>
-              <li>Hash: {{selectedWorkFile.hash}}</li>
-              <li><a href='{{downloadLink}}' >Download</a></li>
-              <li>Created By Job: {{selectedWorkFile.creatorJobRun}}</li>
-          </ul>
-    
+<div class="page-header">
+
+  <h2>Work Files</h2>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-4">
+    <ul class="list-unstyled">
+      <li><b>WorkFileID: </b><div class="pull-right">{{selectedWorkFile.id}}</div></li>
+      <li><b>Original File Name: </b><div class="pull-right">{{selectedWorkFile.originalName}}</div></li>
+      <li><b>Permissions: </b><div class="pull-right">{{selectedWorkFile.permissions}}</div></li>
+      <li><b>Group: </b><div class="pull-right">{{selectedWorkFile.group}}</div></li>
+      <li><b>File Type: </b><div class="pull-right">{{selectedWorkFile.fileType}}</div></li>
+      <li><b>Created By Job: </b><div class="pull-right">{{selectedWorkFile.creatorJobRun}}</div></li>
+      <li ng-show="selectedWorkFile.id"><button class="btn btn-primary" ng-click="editWorkFile()">Edit WorkFile</button></li>
+      <li ng-show="selectedWorkFile.id"><a href='{{downloadLink}}' >Download</a></li>
+    </ul>
   </div>
-  <div style="width: 100%;height: 680px;" ui-grid="gridOptions" ui-grid-selection></div>
+  <div class="col-xs-12 col-sm-8">
+    <ul class="list-unstyled">
+      <li><b>Storage Location: </b><div class="pull-right">{{selectedWorkFile.storage}}</div></li>
+      <li><b>Transient: </b><div class="pull-right">{{selectedWorkFile.isTransient}}</div></li>
+      <li><b>Trashed: </b><div class="pull-right">{{selectedWorkFile.isTrashed}}</div></li>
+      <li><b>Hash: </b><div class="pull-right">{{selectedWorkFile.hash}}</div></li>
+      <li><b>Token: </b><div class="pull-right">{{selectedWorkFile.token}}</div></li>
+    </ul>
+  </div>
+</div>
+<div class="row ">  
+  <div class="col-xs-12 col-sm-4">
+    <label>Group</label>
+    <p>
+    <ui-select  ng-model ="bsObj.selectedGroup" theme="bootstrap" on-select="filter()">
+      <ui-select-match placeholder="Filter by Group">
+        <span ng-bind="$select.selected"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="g in groupNames">
+        <span ng-bind="g"></span>
+      </ui-select-choices>
+    </ui-select>
+    </p>
+    <p>
+    <label>User</label>
+    <ui-select  ng-model ="bsObj.selectedUser" theme="bootstrap" on-select="filter()">
+      <ui-select-match placeholder="Filter by User">
+        <span ng-bind="$select.selected.username"></span>
+      </ui-select-match>
+      <ui-select-choices repeat="u in users track by u.username">
+        <span ng-bind="u.username"></span>
+      </ui-select-choices>
+    </ui-select>
+    </p>
+    
+   </div>
+   <div class="col-xs-12 col-sm-4">
+   <label>From Creation Date</label>
+   <p class="input-group">  
+    
+    <input type="text" class="form-control" placeholder="MM-dd-yyyy" uib-datepicker-popup="MM-dd-yyyy" ng-model="fromDate" is-open="popupFromDate.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="openFromDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+    </p>
+    <label>To Creation Date</label>
+    <p class="input-group">
+    
+     <input type="text" class="form-control" placeholder="MM-dd-yyyy" uib-datepicker-popup="MM-dd-yyyy" ng-model="toDate" is-open="popupToDate.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="openToDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+    </p>
+   </div>
+   <div class="col-xs-12 col-sm-4">
+    <label>WorkFile ID</label>
+    <p>
+      <input type="text" class="form-control" ng-model="bsObj.workFileID"/>
+    </p>
+    <label>WorkFile Hash</label>
+    <p>
+      <input type="text" class="form-control" ng-model="bsObj.workFileHash"/>
+    </p>  
+      
+    
+   </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+    <p>
+      <button ng-click="searchWorkFiles()" class="btn btn-primary">Search</button>
+    </p>
+      <p>
+      <label>Sort By</label>
+      <select class="form-control" ng-model="bsObj.orderBy" style="width:50%">
+        <option value="0">Creation Date</option>
+        <option value="1">Orginal Name / Creation Date</option>
+        <option value="2">Size / Creation Date</option>
+        <option value="4">WorkFile ID</option>
+      </select>
+    </p>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+   
+  </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+    
+      Files Returned: <div ng-show="doneSearching">{{queryFileCount}}</div><div ng-show="!doneSearching"><i class="fa fa-refresh fa-spin"></i></div>
+      
+    </div>
+  </div>
+  <div style="width: 100%;height: 480px;" ui-grid="gridOptions" ui-grid-pagination ui-grid-selection></div>
 		
    
 </div>

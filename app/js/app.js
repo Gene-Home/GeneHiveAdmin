@@ -33,6 +33,7 @@ angular.module('geneHiveAdmin', [
   'ui.grid',
   'ui.grid.edit',
   'ui.grid.selection',
+  'ui.grid.pagination',
   'ui.select', 
   'ngSanitize',
   'ngCookies',
@@ -58,11 +59,12 @@ config(['$stateProvider', function ($stateProvider) {
     .state('jobTypes',{url:'/jobTypes',visibility: 'private',templateUrl: 'partials/jobTypes.html',controller:'JobTypesCtrl'})
     .state('jobRuns',{url:'/jobRuns',visibility: 'private',templateUrl: 'partials/jobRun.html',controller:'JobRunsCtrl'})
     .state('users',{url:'/users',visibility: 'private',templateUrl: 'partials/userMain.html',controller:'UsersCtrl'})
-    .state('workFiles',{url:'/workFiles',visibility: 'private',templateUrl: 'partials/workFiles.html',controller:'WorkFilesCtrl'})
-    .state('entityClasses',{url:'/entityClasses',visibility: 'private',templateUrl: 'partials/entityClasses.html',controller:'EntityClassesCtrl'})
+    .state('workFiles',{url:'/workFiles',visibility: 'private',templateUrl: 'partials/workFilesMain.html',controller:'WorkFilesCtrl'})
+    .state('entityClasses',{url:'/entityClasses',visibility: 'private',templateUrl: 'partials/entityClassMain.html',controller:'EntityClassesCtrl'})
     .state('entities',{url:'/entities',visibility: 'private',templateUrl: 'partials/entities.html',controller:'EntitiesCtrl'})
-    .state('sysConf',{url:'/sysConf',visibility: 'private',templateUrl: 'partials/systemConf.html',controller:'SysConfCtrl'})
-    .state('executionConf',{url:"/executionConf",visibility: 'private',templateUrl:'partials/executionConf.html',controller:'executionConfCtrl'})
+    .state('emailConf',{url:'/emailConf',visibility: 'private',templateUrl: 'partials/emailConf.html',controller:'SysConfCtrl'})
+    .state('loginConf',{url:'/loginConf',visibility: 'private',templateUrl: 'partials/loginConf.html',controller:'SysConfCtrl'})
+    .state('executionConf',{url:"/executionConf",visibility: 'private',templateUrl:'partials/executionConfMain.html',controller:'executionConfCtrl'})
     .state('storageConf',{url:"/storageConf",visibility: 'private',templateUrl:'partials/storageConfMain.html',controller:'StorageConfCtrl'})
     .state('entitySearch',{url:"/entitySearch",visibility: 'private',templateUrl:'partials/entitySearch.html',controller:'EntitySearchCtrl'})
     

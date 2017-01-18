@@ -5,6 +5,7 @@ entitiesController.controller('EntitiesCtrl', ['$scope','$http', 'Entity','uiGri
 
 	// the currently selected entities in the display grid
 	$scope.selectedEntities = [];
+   
 	var columnDefs=[
 		{field:"name", displayName:'Name'},
 		{field:"class", displayName:'Class'}

@@ -1,25 +1,25 @@
 <div class="col-sm-3 col-md-2 sidebar">
   <ul class="nav nav-sidebar">
     <li ng-class="{ active: isCurrentPath('/') }"><a href="#">Dashboard</a></li>
-    <li><h4>&nbsp;Users</h4></li>
+    <li><h4>&nbsp;<i class="fa fa-users" aria-hidden="true"></i>&nbsp;Users</h4></li>
     <li ui-sref-active="active"><a ui-sref="users">Users</a></li>
-    <li><h4>&nbsp;Jobs</h4></li>
-    <li ui-sref-active="active"><a ui-sref="jobTypes">Job Types</a></li>
-    <li ui-sref-active="active"><a ui-sref="jobRuns">Job Runs</a></li>
+    <li><h4>&nbsp;<i class="fa fa-file" aria-hidden="true"></i>&nbsp;Storage</h4></li>
+    <li ui-sref-active="active"><a ui-sref="storageConf">Storage Locations</a></li>
     <li ui-sref-active="active"><a ui-sref="workFiles">Work Files</a></li> 
    </ul>
    <ul class="nav nav-sidebar">
-    <li><h4>&nbsp;System Configuration</h4></li>
-
-    <li ui-sref-active="active"><a ui-sref="sysConf">System Setting</a></li>
+    <li><h4>&nbsp;<i class="fa fa-cog" aria-hidden="true"></i>&nbsp;System Configuration</h4></li>
     <li ui-sref-active="active"><a ui-sref="executionConf">Execution Locations</a></li>
-    <li ui-sref-active="active"><a ui-sref="storageConf">Storage Locations</a></li>
+    <li ui-sref-active="active"><a ui-sref="emailConf">System Email</a></li>
+    <li ui-sref-active="active"><a ui-sref="loginConf">User Login Settings</a></li>
   </ul>
   <ul class="nav nav-sidebar">
-  <li><h4>&nbsp;Meta Data</h4></li>
+  <li><h4>&nbsp;<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;Meta Data</h4></li>
   <li ui-sref-active="active"><a ui-sref="entityClasses">Entity Classes</a></li>
+  <!--
   <li ui-sref-active="active"><a ui-sref="entities">Entity Definitions</a></li>
   <li ui-sref-active="active"><a ui-sref="entitySearch">Search</a></li>
+  -->
   </ul>
 
 </div>

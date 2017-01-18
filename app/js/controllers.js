@@ -136,6 +136,7 @@ geneHiveControllers.controller('UserGroupModalController', function modalControl
 
 geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$uibModal',function($scope,$http,$uibModal) {
 
+ 
   $scope.sysConf = {};
   $scope.updateLoginConf = function(){
     // set only: template.password-reset-subject,policy.public-user-creation,
@@ -188,13 +189,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$uibModal',funct
             $scope.errorData = data;
         });
     };
-  var getExeLocation = function(){
-     $http({method: 'GET', url: '/hive/v2/ExecutionLocations'}).
-        success(function(data, status, headers, config) {
-          $scope.exeLocations = data;
-        }).
-        error(function(data, status, headers, config) {})
-  };
+ 
   var getStorageLocations = function(){
     $http({method: 'GET', url: '/hive/v2/WorkFileStorage/?parameters=true'}).
         success(function(data, status, headers, config) {
@@ -226,7 +221,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$uibModal',funct
         // called asynchronously if an error occurs
         // or server returns response with an error status.
         alert('error')
-        }).then(getExeLocation());
+        });
 
     };
     

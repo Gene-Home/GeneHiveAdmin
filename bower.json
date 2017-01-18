@@ -14,9 +14,11 @@
     "angular-sanitize": "~1.5.8",
     "angular-ui-grid": "~3.2.1",
     "angular-base64": "2.0.1",
-    "bootstrap":"~3.3.6",
-    "angular-bootstrap":"~1.1.0",
+    "bootstrap": "~3.3.6",
+    "angular-bootstrap": "~1.1.0",
     "angular-ui-router": "~0.2.14",
-    "angular-cookies":"1.5.9"
+    "angular-cookies": "1.5.9",
+    "fontawesome": "~4.7.0",
+    "angular-ui-date": "~1.0.1"
   }
 }

@@ -7,6 +7,8 @@ usersController.controller('UsersCtrl', ['$scope','$http','$uibModal', 'User','W
     
     // default to the listing view
     $scope.subview = 'list';
+    // seems dumb but easiest way to get spinner not to show for wf sizes
+    $scope.workFilesLoaded = true; 
     $scope.getInclude = function(){
       if ($scope.subview == 'list'){
           return 'partials/users.html'
@@ -18,7 +20,19 @@ usersController.controller('UsersCtrl', ['$scope','$http','$uibModal', 'User','W
       $scope.subview ='list';
     }                    
 
-
+    $scope.saveNewUser = function(){
+        //scrape the names off the groups and set them to the user
+        $scope.user.groups = $scope.bsObj.editedUserGroups.map(function(grp){return grp.name});
+        User.create({},$scope.user).$promise.then(
+            function(user){
+                $scope.errorMessage = null;
+                $scope.successMessage = "Successfully Created User: " + user.username;
+                $scope.createSuccess = true;
+            },function(message){
+                $scope.errorMessage = "ErrorCreating User: " + message.data; 
+            }
+        )
+    }
     $scope.updateUser = function(){
         //scrape the names off the groups and set them to the user
         $scope.user.groups = $scope.bsObj.editedUserGroups.map(function(grp){return grp.name});    
@@ -64,6 +78,7 @@ usersController.controller('UsersCtrl', ['$scope','$http','$uibModal', 'User','W
     }
     $scope.editUser = function(){
         // editing the currentUser
+         $scope.editing = true;
         // need to copy first in case of cancel/rollback
         $scope.user = angular.copy($scope.selectedUser);
         // need to convert user.groups from just string array to proper Group objects
@@ -231,7 +246,15 @@ usersController.controller('UsersCtrl', ['$scope','$http','$uibModal', 'User','W
             console.log('Modal dismissed at: ' + new Date());
         });
     };
-    $scope.createUser = function (modalName) {
+    $scope.createUser = function(){
+        $scope.user = {};
+        $scope.createSuccess = false;
+         $scope.editing = false;
+        // need to convert user.groups from just string array to proper Group objects
+        //$scope.bsObj.editedUserGroups = $scope.user.groups.map(function(gname){return {name: gname} });
+        $scope.subview = 'edit';
+    }
+    $scope.createUser99 = function (modalName) {
         var modalInstance = $uibModal.open({
             templateUrl: 'partials/newUserModal.html',
             controller: 'UserModalController',

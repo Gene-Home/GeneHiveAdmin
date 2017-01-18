@@ -5,14 +5,24 @@ var geneHiveServices = angular.module('geneHiveServices', ['ngResource']);
 
 geneHiveServices.factory('WorkFile',['$resource',
   function($resource){
-    return $resource(api_url + 'WorkFileProperties/', {}, {
-      query: {method:'GET', isArray:true}
+    return $resource(api_url + 'WorkFileProperties/:id', {}, {
+      query: {method:'GET', isArray:true},
+      queryOne: {method:'GET'},
+      update: {method:'PUT'}
     });
   }]
  );
 geneHiveServices.factory('StorageLocation',['$resource',
   function($resource){
     return $resource(api_url + 'WorkFileStorage/:wfsName?parameters=true', {}, {
+      query: {method:'GET', isArray:true},
+      update: { method:'PUT' }
+    });
+  }]
+ );
+geneHiveServices.factory('ExeLocation',['$resource',
+  function($resource){
+    return $resource(api_url + 'ExecutionLocations/:exeLocName', {}, {
       query: {method:'GET', isArray:true},
       update: { method:'PUT' }
     });
