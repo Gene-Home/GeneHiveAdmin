@@ -65,7 +65,7 @@
           <ui-select-match placeholder="Filter by Group">
             <span ng-bind="$select.selected.name"></span>
           </ui-select-match>
-          <ui-select-choices repeat="g in userGroups track by g.name">
+          <ui-select-choices repeat="g in userGroups track by g.name | orderBy:'name'">
             <span ng-bind="g.name"></span>
           </ui-select-choices>
           <option value="add">All Groups</option>

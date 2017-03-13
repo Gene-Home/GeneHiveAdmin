@@ -16,12 +16,14 @@
 		<table class="table table-striped">
 			<thead>
             	<tr>
-				<th>Name</th><th>Group</th><th>Default Priority</th><th>Permissions</th><th>Directory</th><th></th>
+				<th>Name</th><th>Group</th><th>Size</th><th>Files</th><th>Default Priority</th><th>Permissions</th><th>Directory</th><th></th>
 			</tr>
 			</thead>
 			<tr ng-repeat="lc in localLocs">
 				<td>{{lc.name}}</td>
 				<td>{{lc.group}}</td>
+				<td>{{lc.wfSize}}</td>
+				<td>{{lc.workFileCount}}</td>
 				<td>{{lc.defaultPriority}}</td>
 				<td>{{lc.permissions}}</td>
 				<td>{{lc.parameters.directory}}</td>
@@ -41,12 +43,14 @@
 		<table class="table table-striped">
 			<thead>
             	<tr>
-				<th>Name</th><th>Group</th><th>Default Priority</th><th>Permissions</th><th>Bucket</th><th></th>
+				<th>Name</th><th>Group</th><th>Size</th><th>Files</th><th>Default Priority</th><th>Permissions</th><th>Bucket</th><th></th>
 				</tr>
 			</thead>
 			<tr ng-repeat="s in s3Locs">
 				<td>{{s.name}}</td>
 				<td>{{s.group}}</td>
+				<td>{{s.wfSize}}</td>
+				<td>{{s.workFileCount}}</td>
 				<td>{{s.defaultPriority}}</td>
 				<td>{{s.permissions}}</td>
 				<td>{{s.parameters.bucket}}</td>

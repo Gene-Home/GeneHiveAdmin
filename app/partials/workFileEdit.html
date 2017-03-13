@@ -1,0 +1,104 @@
+
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <div class="page-header">
+
+  <h2><a href="" ng-click="listWorkFiles()">Work Files</a></h2>
+</div>
+  <div class="row">
+    
+    </div>
+        <div ng-show="successMessage" class="alert alert-success">
+          {{successMessage}}
+    </div>
+    <div ng-show="errorMessage" class="alert alert-danger">
+          {{errorMessage}}
+    </div>
+    <span class="panel-title section-title"><h4>WorkFile ID: {{workFile.id}}</h4></span>
+    <form >
+      <fieldset>
+        <div class="form-group">
+          <label class="control-label" for="first">Hash:</label>
+          <input type="text" name="name" id="name" class="form-control" ng-model="workFile.hash"  ng-disabled="true">
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="first">Original File Name:</label>
+          <input type="text" name="name" id="name" class="form-control" ng-model="workFile.originalName">
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="last">File Type</label>
+          <input type="text" name="bucket" id="bucket" class="form-control" ng-model="workFile.fileType">
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="last">Token</label>
+          <input type="text" name="defaultPriority" id="defaultPriority" class="form-control" ng-model="workFile.token">
+        </div>
+        <div class="form-group"> 
+          <label class="control-label" for="permissions">Trashed?</label><br/>
+            <label>
+              <input type="radio" ng-model="workFile.isTrashed" data-ng-value="true">
+              Yes
+            </label><br/>
+            <label>
+              <input type="radio" ng-model="workFile.isTrashed" data-ng-value="false">
+              No
+            </label><br/>
+        </div>
+        <div class="form-group" >
+          <div class="form-group">
+            <label class="control-label">Permissions JSON:</label><br/>
+            <input type="text" name="name" id="name" class="form-control" value={{workFile.permissions}} ng-disabled="true">
+          </div>
+          <label class="control-label" for="permissions">Group Permissions:</label><br/>
+                <label>
+                <input type="radio" ng-model="workFile.permissions.group[0]" value="R">
+                   R - Users in the Same Group can read but not update the file
+                </label><br/>
+                <label>
+                <input type="radio" ng-model="workFile.permissions.group[0]" value="U">
+                  U - Users in Group Can Use update the File
+                </label><br/>
+                <label>
+                  <input type="radio" ng-model="workFile.permissions.group[0]" value="">
+                   Blank - No permissions for anyone in the group. Cannot read or update unless given permission in the 'Other' permissions
+                </label><br/>
+            </div>
+            <div class="form-group" >
+                <label class="control-label" for="permissions">Other Permissions:</label><br/>
+                <label>
+                <input type="radio" ng-model="workFile.permissions.other[0]" value="R">
+                  R - Anyone may read this work file
+                </label><br/>
+                <label>
+                <input type="radio" ng-model="workFile.permissions.other[0]" value="U">
+                 U - Anyone may update this file
+                </label><br/>
+                <label>
+                <input type="radio" ng-model="workFile.permissions.other[0]" value="">
+                  Blank - Only Group permissions apply
+                </label><br/>
+                <label>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="group">Group</label>
+              <ui-select  ng-model ="workFile.group" theme="bootstrap" on-select="filter()">
+                <ui-select-match>
+                  <span ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="g in groupNames">
+                  <span ng-bind="g"></span>
+                </ui-select-choices>
+            </ui-select>
+
+        </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary"  ng-click="updateWorkFile()" ng-disabled="saving">
+                  <span ng-show="saving">Saving <i class="glyphicon glyphicon-refresh spinning"></i></span>
+                  <span ng-show="!saving"><i class="glyphicon glyphicon-save"></i>Save</span>
+                </button>
+                <button type="button" class="btn btn-primary"  ng-click=";clearMessages();showMainListing()" ng-disabled="saving">Cancel
+
+                </button>
+            </div>
+</fieldset></form>
+		</div>
+	</div>

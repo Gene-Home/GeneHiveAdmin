@@ -1,0 +1,71 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<div class="page-header">
+	 <h2 ng-show="(action=='editing')"><a href="" ng-click="listExeLocations()"> Execution Locations</a></h2>
+    <h3>{{newLoc.name}}</h3>
+   <h2 ng-show="(action=='creating')">Exeuction Locations/New</h2>
+  </div>
+  	<div class="alert alert-danger alert-dismissible" role="alert" ng-show="errorMessage">
+  		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  			<span aria-hidden="true">&times;</span>
+  		</button>
+  		<strong>{{errorMessage}}</strong>
+  	</div>
+<form name="contactForm">
+        <fieldset>
+          <div class="row">
+            <div class="form-group col-xs-4">
+                <label class="control-label" for="first">Execution Location Name:</label>
+                <input type="text" name="name" id="name" class="form-control" ng-model="newLoc.name" ng-disabled=(action=='editing')>
+            </div>
+            <div class="form-group col-xs-4">
+                <label class="control-label" for="last">Host</label>
+                <input type="text" name="host" id="host" class="form-control" ng-model="newLoc.host">
+            </div>
+            <div class="form-group col-xs-4">
+                <label class="control-label" for="last">Remote Username</label>
+                <input type="text" name="remoteUsername" id="remoteUsername" class="form-control" ng-model="newLoc.remoteUsername">
+            </div>
+            <div class="form-group col-xs-4">
+                <label class="control-label" for="last">Poll Delay</label>
+                <input type="text" name="pollDelay" id="pollDelay" class="form-control" ng-model="newLoc.pollDelay">
+            </div>
+
+            <div class="form-group col-xs-4" >
+                <label class="control-label" for="permissions">Default?</label><br/>
+                <label>
+    				      <input type="radio" ng-model="newLoc.default" value="true">
+    					     Yes
+  					     </label><br/>
+  				      <label>
+    				      <input type="radio" ng-model="newLoc.default" value="false">
+    					       No
+  				      </label><br/>
+            </div>
+
+            <div class="form-group col-xs-4" >
+                <label class="control-label" for="permissions">Trashed?</label><br/>
+                <label>
+                  <input type="radio" ng-model="newLoc.trashed" value="true">
+                   Yes
+                 </label><br/>
+                <label>
+                  <input type="radio" ng-model="newLoc.trashed" value="false">
+                     No
+                </label><br/>
+            </div>
+          </div>       
+          <div class="row">
+            
+            <div class="form-group col-xs-4">  
+                <button type="button" class="btn btn-primary"  ng-click="saveExeLocation()" ng-disabled="saving">
+                	<span ng-show="saving">Saving <i class="glyphicon glyphicon-refresh spinning"></i></span>
+                	<span ng-show="!saving"><i class="glyphicon glyphicon-save"></i>Save</span>
+                </button>
+                <button type="button" class="btn btn-primary"  ng-click="listExeLocations()" ng-disabled="saving">Cancel
+
+                </button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+</div>

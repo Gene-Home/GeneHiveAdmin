@@ -1,57 +1,83 @@
+<div class="container-fluid">
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-  <ol class="breadcrumb">
-     <li class="active">Entity Search X</a></li>
-  </ol>
-
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-show="errorMessage">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>{{errorMessage}}</strong>
+    </div>
   <div class="row">
+    <div class="form-group col-md-4 col-xs-0">
+    </div>
   	<div class="form-group col-xs-4">
-     <label>Search For:</label>
-    	
-      <ui-select theme="bootstrap" ng-model="search.selectedEntityClass" on-select="onSearchEntitySelected($item, $model)">
-        <ui-select-match>
+      <form>
+        <div class="form-group">
+          <label>Entity Class ({{entityClasses.length}}):</label>
+          <ui-select theme="bootstrap" ng-model="search.selectedEntityClass" on-select="onSearchEntitySelected($item, $model)"  style="min-width: 300px;" tabindex="0">
+          <ui-select-match placeholder="select an entity class">
           {{$select.selected.name}}
-        </ui-select-match>
-        <ui-select-choices repeat="ent in (entityClasses | filter: $select.search)">
+          </ui-select-match>
+          <ui-select-choices repeat="ent in (entityClasses | filter: $select.search)  | orderBy:'ent.name'"  position='down'>
           {{ent.name}}
-        </ui-select-choices>
-      </ui-select> 
-      <label>Search by {{search.selectedEntityClass.name}} ID</label>
-      <input type="text" class="form-control">
-    
-        <input type="button" class="btn btn-primary" ng-click="searchEntity()" value ="Search">
-	</div>
-  <div class="form-group col-xs-4">
-    
-    <label>Search by Field</label>
-    <ui-select theme="bootstrap" ng-model="search.classfield" on-select="loadDistinctValues()">
-        <ui-select-match>
-          {{$select.selected}}
-        </ui-select-match>
-        <ui-select-choices repeat="f in (search.classfields | filter: $select.search)">
-          {{f}}
-        </ui-select-choices>
-      </ui-select>
-      <label>Field {{search.selectedEntityClass.name}} ID</label>
-      <input type="text" class="form-control" ng-model="search.classFieldSearchFor">
-      <label ng-repeat="d in distinctVals" >{{d}}&nbsp</label>  
-  </div>
-	 <div class="clearfix"></div>
-    <div class="col-xs-12 col-sm-12">
-		  <table class="table table-bordered">
-      <tr ng-repeat="ent in entityResults">
-        <td>
-          Created On:{{ent._creation_date}}
-          Last Updated:{{ent._last_updated}}
-          
-        <div ng-repeat="(key, value) in ent">
-        {{key}}--{{value}}
+          </ui-select-choices>
+        </ui-select> 
         </div>
 
-        
-        </td>
-      <tr>  
-      </table>
+        <div class="form-group">
+          <label>Search By:</label>
+          <ui-select  theme="bootstrap"
+                  ng-model="search.classfield"
+                  on-select="loadDistinctValues()"
+                  style="min-width: 300px;"
+                  tabindex="1">
+            <ui-select-match placeholder="select an entity field">
+              {{$select.selected}}
+            </ui-select-match>
+            <ui-select-choices repeat="f in search.classfields  | filter: $select.search">
+              <span ng-bind-html="f | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+
+        <div class="form-group">
+          <div ng-show="!entityFieldArrayHuge">
+            <label>{{search.classfield.show_name}} {{search.distinctFieldVals.length}} </label>
+            <ui-select ng-model="search.classFieldSearchFor" theme="bootstrap" style="min-width: 300px;" ng-disabled="!search.distinctFieldVals">
+              <ui-select-match placeholder="select a field value">{{$select.selected}}</ui-select-match>
+              <ui-select-choices repeat="fieldValue in search.distinctFieldVals | filter: $select.search">
+                <span ng-bind-html="fieldValue | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div ng-show="entityFieldArrayHuge">
+            <label>{{search.classfield.show_name}} Search for values such as :{{search.distinctFieldVals[0]}},{{search.distinctFieldVals[1]}},{{search.distinctFieldVals[2]}} </label>
+            <input type="text" class="form-control" ng-model="fullTextValue">
+          </div>
+        </div>
+        <input type="submit" class="btn btn-primary"
+              ng-click="searchEntity(1,10)"
+              value ="Search"
+              ng-show="!entityFieldArrayHuge">
+        <input type="submit" class="btn btn-primary"
+            ng-click="searchFullText(1,10)"
+            value="Search FT"
+            ng-show="entityFieldArrayHuge">
+      </form>
     </div>
-  </div>
- </div> 
+    <div class="form-group col-md-4 col-xs-0">
+    </div>
+  </div><!-- end of the row -->
+	<div class="row">
+    <div class="col-xs-12 col-sm-12">
+    <div align="center">
+      <h5>{{totalEntityCount}} Results</h5>
+    </div>
+    <div style="width: 100%;height: 480px;" ui-grid="gridOptions" ui-grid-pagination ui-grid-selection></div>
+    </div>
+
+    </div>
+  
+
+</div>
+</div> <!-- end container -->
+ <div ui-view></div>

@@ -19,6 +19,7 @@
     "angular-ui-router": "~0.2.14",
     "angular-cookies": "1.5.9",
     "fontawesome": "~4.7.0",
-    "angular-ui-date": "~1.0.1"
+    "angular-ui-date": "~1.0.1",
+    "select2": "3.5.4"
   }
 }

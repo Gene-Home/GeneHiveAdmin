@@ -37,6 +37,7 @@ angular.module('geneHiveAdmin', [
   'ui.select', 
   'ngSanitize',
   'ngCookies',
+  'ngFileUpload',
   'base64',
   'geneHiveControllers',
   'geneHive.JobRunsController',
@@ -61,12 +62,14 @@ config(['$stateProvider', function ($stateProvider) {
     .state('users',{url:'/users',visibility: 'private',templateUrl: 'partials/userMain.html',controller:'UsersCtrl'})
     .state('workFiles',{url:'/workFiles',visibility: 'private',templateUrl: 'partials/workFilesMain.html',controller:'WorkFilesCtrl'})
     .state('entityClasses',{url:'/entityClasses',visibility: 'private',templateUrl: 'partials/entityClassMain.html',controller:'EntityClassesCtrl'})
-    .state('entities',{url:'/entities',visibility: 'private',templateUrl: 'partials/entities.html',controller:'EntitiesCtrl'})
+    .state('entities1',{url:'/entities',visibility: 'private',templateUrl: 'partials/entities.html',controller:'EntitiesCtrl'})
     .state('emailConf',{url:'/emailConf',visibility: 'private',templateUrl: 'partials/emailConf.html',controller:'SysConfCtrl'})
     .state('loginConf',{url:'/loginConf',visibility: 'private',templateUrl: 'partials/loginConf.html',controller:'SysConfCtrl'})
     .state('executionConf',{url:"/executionConf",visibility: 'private',templateUrl:'partials/executionConfMain.html',controller:'executionConfCtrl'})
     .state('storageConf',{url:"/storageConf",visibility: 'private',templateUrl:'partials/storageConfMain.html',controller:'StorageConfCtrl'})
-    .state('entitySearch',{url:"/entitySearch",visibility: 'private',templateUrl:'partials/entitySearch.html',controller:'EntitySearchCtrl'})
+    .state('entities',{url:"/entities",visibility: 'private',templateUrl:'partials/entities.html',controller:'EntitySearchCtrl'})
+    .state('entities.search',{url:"/entitySearch",visibility: 'private',templateUrl:'partials/entitySearch.html',controller:'EntitySearchCtrl'})
+    .state('entities.editWorkFile',{url:"/editWorkFile",visibility: 'private',templateUrl:'partials/workFileEdit.html',controller:'EntitySearchCtrl',params: {workFile: null}})
     
 }]).
 config(['$httpProvider', function ($httpProvider){

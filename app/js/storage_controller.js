@@ -31,6 +31,7 @@ storageController.controller('StorageConfCtrl', ['$scope','$http', '$uibModal','
         	for (i = 0; i<locs.length; i++){
                 // make sure we have an index so we can find them easily
                 locs[i].idx = i;
+                locs[i].wfSize = bytesToSize(locs[i].totalWorkFileSize)
         		if(locs[i].protocol=='fs'){
         			$scope.localLocs.push(locs[i]);
         		}
@@ -178,5 +179,12 @@ storageController.controller('StorageConfCtrl', ['$scope','$http', '$uibModal','
         };
         
     }//end saveLocation 
+    function bytesToSize(bytes) {
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return 'n/a';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        if (i == 0) return bytes + ' ' + sizes[i];
+        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+    };
     $scope.loadLocations();
 }])

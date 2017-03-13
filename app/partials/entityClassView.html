@@ -1,0 +1,43 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <div class="row">
+   <div class="page-header">
+     <h2><a href="" ng-click="listEntityClasses()">Entity Classes</a></h2>
+     <h3>{{selectedEC.name}}</h3>
+     <button type="button" ng-click="editEntityClass(selectedEC.idx)" class="btn btn-primary">Edit</button>
+    </div>
+    <p>
+      <h4><i>{{selectedEC.description}}</i></h4>
+    </p>
+    <div style="width:100%;overflow:auto; max-height:400px;">
+    <h3>Variables:</h3>
+    <table class="table witdh:100" >
+      <th>Name</th><th>Type</th><th>Class(if type=E)</th><th>Category</th><th>Codes</th><th>Array?</th>
+      <tbody >
+        <tr ng-repeat="(key,varib) in selectedEC.variables">
+          <td>{{key}}</td>
+          <td>{{varib.type}}</td>
+          <td>{{varib.entity_class_name}}</td>
+          <td>{{varib.category}}</td>
+          <td>{{varib.codes}}</td>
+          <td>
+          <div ng-switch="varib.type">
+            <div ng-switch-when="C">
+              <select class="form-control">
+                <option ng-repeat="(k,v) in varib.codes" value="{{v}}">
+                                {{v}}
+                </option>
+              </select>
+
+            </div>
+            <div ng-switch-when="T">T</div>
+            <div ng-switch-when="F">F</div>
+            <div ng-switch-when="I">I</div>
+            <div ng-switch-when="D">D</div>
+            <div ng-switch-default>X</div>
+          </div>
+          </td>
+
+        </tr>
+      </tbody>  
+    </table>
+    </div>

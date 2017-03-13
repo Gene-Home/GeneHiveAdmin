@@ -1,19 +1,23 @@
 var workFilesController = angular.module('geneHive.WorkFilesController', []);
 
 
-workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','User','WorkFile','UserGroup','uiGridConstants',
-					 function($scope,$http,$filter,User,WorkFile,UserGroup,uiGridConstants) {
+workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','$timeout','Upload','User','WorkFile','UserGroup','uiGridConstants',
+					 function($scope,$http,$filter,$timeout,Upload,User,WorkFile,UserGroup,uiGridConstants) {
 
 
     // default to the listing view
-    $scope.subview = 'list';                    
+    $scope.subview = 'list';   
+                    
     $scope.getInclude = function(){
       if ($scope.subview == 'list'){
           return 'partials/workFiles.html'
-      }else{
+      }else if($scope.subview == 'upload'){
+        return 'partials/workFileUpload.html'
+      }{
         return 'partials/workFileEdit.html'
       }
     }
+    
     $scope.selectedWorkFiles	= [];
     $scope.doneSearching = true;
     $scope.filterOptions = {
@@ -50,9 +54,13 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','Use
     };
     // it MUST have a dot in it for ui-select!
     $scope.bsObj = {};
-    $scope.listWorkFiles = function(){
+    $scope.showMainListing = function(){
         $scope.subview = "list";
         loadWorkFiles();
+    }
+    $scope.addWorkFile = function(){
+        $scope.workFile = {};
+        $scope.subview ='upload';
     }
     var loadWorkFiles = function(){
         WorkFile.query(function(wfiles){
@@ -80,6 +88,30 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','Use
             }
         )
     };
+    $scope.uploadWorkFile = function(file) {
+    file.upload = Upload.upload({
+        url: '/hive/v2/WorkFiles?originalName='+ $scope.workFile.originalName
+            + '&storage=' + $scope.workFile.storage 
+            + '&group=' + $scope.workFile.group,
+        headers : {
+            'Content-Type': 'text/plain'
+        },      
+        data: {
+                file: file
+            },
+        });
+    file.upload.then(function (response) {
+         $timeout(function () {
+            file.result = response.data;
+            });
+        }, function (response) {
+        if (response.status > 0)
+        $scope.errorMsg = response.status + ': ' + response.data;
+        }, function (evt) {
+      // Math.min is to fix IE which reports 200% sometimes
+      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+    });
+    }
     /**
      Prepare for and display the workfile editing page
     **/
@@ -125,7 +157,7 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','Use
         $scope.doneSearching = false;
         $scope.clearMessages()
         var queryParams = {}
-        if($scope.bsObj.workFileID){
+        if($scope.bsObj.workFileID && $scope.bsObj.workFileID.length > 0){
             WorkFile.queryOne({id:$scope.bsObj.workFileID},function(wfile){
                 // need to make an array out of the single wf for the grid
                 wfarray = [wfile]
@@ -150,11 +182,11 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','Use
         if($scope.bsObj.orderBy){
             queryParams._orderBy=$scope.bsObj.orderBy;
         }
-        if($scope.toDate){
-            queryParams.toDate = $filter('date')($scope.toDate,"yyyy-MM-dd");
+        if($scope.bsObj.toDate){
+            queryParams._toCreationDatetime = $filter('date')($scope.bsObj.toDate,"yyyy-MM-dd");
         }
-        if($scope.fromDate){
-            queryParams.fromDate = $filter('date')($scope.fromDate,"yyyy-MM-dd");
+        if($scope.bsObj.fromDate){
+            queryParams._fromCreationDatetime = $filter('date')($scope.bsObj.fromDate,"yyyy-MM-dd");
         }
         WorkFile.query(queryParams,function(wfiles){
             queryParams._justCount='true';

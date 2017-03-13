@@ -2,6 +2,7 @@
 <div class="page-header">
 
   <h2>Work Files</h2>
+  <button class="btn btn-primary" ng-click="addWorkFile()">Add WorkFile</button>
 </div>
 <div class="row">
   <div class="col-xs-12 col-sm-4">
@@ -56,7 +57,7 @@
    <label>From Creation Date</label>
    <p class="input-group">  
     
-    <input type="text" class="form-control" placeholder="MM-dd-yyyy" uib-datepicker-popup="MM-dd-yyyy" ng-model="fromDate" is-open="popupFromDate.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+    <input type="text" class="form-control" placeholder="MM-dd-yyyy" uib-datepicker-popup="MM-dd-yyyy" ng-model="bsObj.fromDate" is-open="popupFromDate.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
     <span class="input-group-btn">
       <button type="button" class="btn btn-default" ng-click="openFromDate()"><i class="glyphicon glyphicon-calendar"></i></button>
     </span>
@@ -64,7 +65,7 @@
     <label>To Creation Date</label>
     <p class="input-group">
     
-     <input type="text" class="form-control" placeholder="MM-dd-yyyy" uib-datepicker-popup="MM-dd-yyyy" ng-model="toDate" is-open="popupToDate.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+     <input type="text" class="form-control" placeholder="MM-dd-yyyy" uib-datepicker-popup="MM-dd-yyyy" ng-model="bsObj.toDate" is-open="popupToDate.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="openToDate()"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
