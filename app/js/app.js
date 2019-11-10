@@ -64,6 +64,7 @@ config(['$stateProvider', function ($stateProvider) {
     .state('entityClasses',{url:'/entityClasses',visibility: 'private',templateUrl: 'partials/entityClassMain.html',controller:'EntityClassesCtrl'})
     .state('entities1',{url:'/entities',visibility: 'private',templateUrl: 'partials/entities.html',controller:'EntitiesCtrl'})
     .state('emailConf',{url:'/emailConf',visibility: 'private',templateUrl: 'partials/emailConf.html',controller:'SysConfCtrl'})
+    .state('perfConf',{url:'/perfConf',visibility: 'private',templateUrl: 'partials/perfConf.html',controller:'SysConfCtrl'})
     .state('loginConf',{url:'/loginConf',visibility: 'private',templateUrl: 'partials/loginConf.html',controller:'SysConfCtrl'})
     .state('executionConf',{url:"/executionConf",visibility: 'private',templateUrl:'partials/executionConfMain.html',controller:'executionConfCtrl'})
     .state('storageConf',{url:"/storageConf",visibility: 'private',templateUrl:'partials/storageConfMain.html',controller:'StorageConfCtrl'})

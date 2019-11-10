@@ -1,6 +1,6 @@
 
 /* Services */
-var api_url = 'http://localhost:8080/hive/v2/';
+var api_url = 'hive/v2/';
 var geneHiveServices = angular.module('geneHiveServices', ['ngResource']);
 
 geneHiveServices.factory('WorkFile',['$resource',
@@ -14,8 +14,8 @@ geneHiveServices.factory('WorkFile',['$resource',
  );
 geneHiveServices.factory('StorageLocation',['$resource',
   function($resource){
-    return $resource(api_url + 'WorkFileStorage/:wfsName?parameters=true', {}, {
-      query: {method:'GET', isArray:true},
+    return $resource(api_url + 'WorkFileStorage/:wfsName', {}, {
+      query: {method:'GET',params:{parameters:true}, isArray:true},
       update: { method:'PUT' }
     });
   }]

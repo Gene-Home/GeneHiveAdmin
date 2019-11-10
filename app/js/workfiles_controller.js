@@ -1,8 +1,68 @@
 var workFilesController = angular.module('geneHive.WorkFilesController', []);
 
+workFilesController.controller('WorkFilesAcessCrtl',['$scope','$http','wfId','$uibModalInstance','uiGridConstants',
+        function modalController($scope,$http,wfId,$uibModalInstance,uiGridConstants){
+    $scope.getHistory = function(){
+        $scope.history_loaded = false;
+        $scope.wfId = wfId;
+        $scope.selectedRecord = {};
+        var url = '/hive/v2/WorkFileProperties/history/' + wfId;   
+        $http.get(url).
+            then(function(response) {
+                // gotta map this to the array becausee
+                // of angular's fussy date handling
+                function changeDate(wf) {
+                    wout = wf;
+                    // this is needed by angular date filters
+                    wout.timestamp = new Date(wf.timestamp)
+                    return wout;
+                }
+                $scope.wfAccessGridOptions.data = response.data.map(changeDate);
+                $scope.history_loaded = true;       
+                },
+                function(response){
+                    $scope.errorMessage=response;
+                }
+            );  
+   };
+   $scope.ok = function () {
+        $uibModalInstance.close();
+    };        
+    var columnDefs= [
+        {field: "timestamp",width: '40%',displayName:'Time',type: 'date', cellFilter: 'date:"M/d/yy h:mm:ss a"' },
+        {field:"remote_user_name",displayName:"remote name",width:'20%'},
+        {field: "remote_address",displayName:"remote addr",width:'20%'},
+        {field: "response_status_code",displayName:"resp code",width:'20%'}
+    ];        
+    $scope.wfAccessGridOptions = {
+        enableColumnResize: true,
+        columnDefs: columnDefs,
+        enableGridMenu: false,
+        enableRowSelection: true,
+        enableFullRowSelection: true,
+        multiSelect: false,
+        noUnselect: true,
+        enableFiltering: true,
+        onRegisterApi: function(gridApi){
+            $scope.gridApi = gridApi;
+        }   
+    
+    }; 
+    $scope.wfAccessGridOptions.onRegisterApi = function( gridApi ) {
+        $scope.gridApi = gridApi; 
+        gridApi.selection.on.rowSelectionChanged($scope,function(row){
+            var msg = 'row selected ' + row.isSelected;
+            $scope.selectedRecord = row.entity;    
+            });
+        //needs to be called to have rows selectable
+        $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.OPTIONS);     
+    }
+    $scope.getHistory();
+    }
+    ])
 
-workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','$timeout','Upload','User','WorkFile','UserGroup','uiGridConstants',
-					 function($scope,$http,$filter,$timeout,Upload,User,WorkFile,UserGroup,uiGridConstants) {
+workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','$timeout','Upload','User','WorkFile','UserGroup','uiGridConstants','$uibModal',
+					 function($scope,$http,$filter,$timeout,Upload,User,WorkFile,UserGroup,uiGridConstants,$uibModal) {
 
 
     // default to the listing view
@@ -29,16 +89,17 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','$ti
         sort: null
     };   
     var columnDefs= [
-     {field:'id',width: 60},
+        {field:'id',width: 60},
         {field:"creator"},
         {field: "group"},
         {field: 'storage'},
-        {field: "creationDatetime"},
+        {field: "creationDatetime",type: 'date', cellFilter: 'date:"M/d/yy h:mm:ss a"' },
         {field:'originalName'},
         {field:'fileType'},
         {field:'length',width: 80},
         {field:'isTrashed',width: 80},
     ];
+
     $scope.gridOptions = {
         paginationPageSizes: [25, 50, 75],
         paginationPageSize: 25,
@@ -67,6 +128,18 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','$ti
             $scope.gridOptions.data = wfiles;
         })
     };
+    $scope.showWorkFileHistory = function(){
+        
+        modalInstance = $uibModal.open({
+                    templateUrl: 'partials/workFileAccessModal.html',
+                    controller: 'WorkFilesAcessCrtl',
+                    resolve: {
+                        wfId : function(){
+                            return $scope.selectedWorkFile.id; 
+                        }
+                    }
+                    });
+    }
     $scope.loadUsersAndGroups = function(){
         User.query(function(data){
             $scope.users = [{username:'Any User'}]
@@ -157,6 +230,7 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','$ti
         $scope.doneSearching = false;
         $scope.clearMessages()
         var queryParams = {}
+        //looking for a file by ID
         if($scope.bsObj.workFileID && $scope.bsObj.workFileID.length > 0){
             WorkFile.queryOne({id:$scope.bsObj.workFileID},function(wfile){
                 // need to make an array out of the single wf for the grid
@@ -182,21 +256,31 @@ workFilesController.controller('WorkFilesCtrl', ['$scope','$http','$filter','$ti
         if($scope.bsObj.orderBy){
             queryParams._orderBy=$scope.bsObj.orderBy;
         }
-        if($scope.bsObj.toDate){
+        if($scope.bsObj.toDate && $scope.bsObj.fromDate){
             queryParams._toCreationDatetime = $filter('date')($scope.bsObj.toDate,"yyyy-MM-dd");
         }
-        if($scope.bsObj.fromDate){
+        if($scope.bsObj.toDate && $scope.bsObj.fromDate){
             queryParams._fromCreationDatetime = $filter('date')($scope.bsObj.fromDate,"yyyy-MM-dd");
+        }
+        if($scope.bsObj.originalName){
+            queryParams.originalName=$scope.bsObj.originalName;
         }
         WorkFile.query(queryParams,function(wfiles){
             queryParams._justCount='true';
             WorkFile.queryOne(queryParams,function(fileCount){
-                $scope.gridOptions.data = wfiles;
+                function changeDate(wf) {
+                    wout = wf;
+                    // this is needed by angular date filters
+                    wout.creationDatetime = new Date(wf.creationDatetime)
+                    return wout;
+                }
+                $scope.gridOptions.data = wfiles.map(changeDate);
                 $scope.queryFileCount = fileCount.work_file_count;
                 $scope.doneSearching = true;    
             });
         })
     }
+
     $scope.selectedWorkFile = {};
     $scope.gridOptions.onRegisterApi = function( gridApi ) {
             $scope.gridApi = gridApi;

@@ -13,7 +13,7 @@
         <div class="col-sm-6  col-md-6 ">
         <form name="newClassForm" ng-submit="createClass(newClassForm.$valid)" novalidate>
             <div class="form-group" ng-class="{ 'has-error': newClassForm.$invalid && submitted }">
-                <label>Class Name (required - must be unique to the system) ddd {{action != 'creating'}}</label>
+                <label>Class Name (required - must be unique to the system) </label>
                 <input  class="form-control" name="name" type="text" ng-model="selectedEC.name" ng-disabled="action!='creating'" >
                     <p ng-show="newClassForm.name.$invalid  && submitted" class="help-block">
                             Name is Required </p>
@@ -35,7 +35,13 @@
                         <th>Codes</th>
                     <tbody ng-repeat="(key,varib) in selectedEC.variables">
                         <tr>
-                            <td>[<a href ng-click="removeVariable(key)">X</a>]</td>
+                            <td ng-show="varib">
+                            <button type="button" 
+                                    class="btn btn btn-danger btn-xs" 
+                                    ng-click="removeVariable(key)">remove
+                            </button>
+                            </td>
+                            <td ng-show="!varib">removed</td>
                             <td>{{key}}</td>
                             <td>{{varib.type}}</td>
                             <td>{{varib.is_array}}</td>
@@ -72,7 +78,9 @@
                                                         Text:'T',
                                                         Codes:'C',
                                                         Entity:'E',
-                                                        WorkFile:'W'}" value="{{v}}">
+                                                        WorkFile:'W',
+                                                        VariableEnt:'V',
+                                                        Boolean:'B'}" value="{{v}}">
                                 {{k}}
                     </option>
                 </select>

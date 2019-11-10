@@ -1,14 +1,11 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
  <div class="page-header">
  	<div class="btn-group pull-right">
-        <button type="button" class="btn btn-primary"  ng-click="addS3Location()">Add New S3</button>
+        <button type="button" class="btn btn-primary"  ng-click="addS3Location()">Add New S3</button> &nbsp;
          <button type="button" class="btn btn-primary"  ng-click="addFSLocation()">Add New Local</button>
     </div>
     <h2>Storage Locations</h2>
-    <div class="alert alert-success" role="alert" ng-show="successMessage">
-    	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  			<span aria-hidden="true">&times;</span>
-  		</button>
+    <div class="alert alert-success alert-dismissable" role="alert" ng-show="successMessage">
   		<strong>{{successMessage}}</strong>
   	</div>	
  </div>
@@ -31,9 +28,11 @@
 					<button type="button" class="btn btn-success btn-sm" ng-click="editLocation(lc.idx)" >
           				<span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
         			</button>
-        			<button type="button" class="btn btn-danger btn-sm" ng-click="deleteLocation(lc.idx)" >
+        			
+        			<button type="button" class="btn btn-danger btn-sm" ng-click="deleteLocation(lc.idx)" ng-show="lc.workFileCount > 0">
           				<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
         			</button>
+        			
 				</td>
 			</tr>
 		</table>	
@@ -58,7 +57,7 @@
 					<button type="button" class="btn btn-success btn-sm" ng-click="editLocation(s.idx)" >
           				<span class="glyphicon glyphicon-edit"></span>&nbsp;Edit
         			</button>
-        			<button type="button" class="btn btn-danger btn-sm" ng-click="deleteLocation(s.idx)" >
+        			<button type="button" class="btn btn-danger btn-sm" ng-click="deleteLocation(s.idx)" ng-show="s.workFileCount > 0">
           				<span class="glyphicon glyphicon-remove"></span>&nbsp;Delete
         			</button>
 				</td>

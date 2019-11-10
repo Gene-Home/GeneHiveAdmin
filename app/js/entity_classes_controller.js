@@ -44,6 +44,8 @@ entityClassesController.controller('EntityClassesCtrl',['$scope','$http','$uibMo
         $scope.newVariable = {};
 
 		$scope.listEntityClasses = function(){
+        //need to clear this out incase its set
+        $scope.errorMessage = undefined;
         EntityClass.query().$promise.then(
             function(eclasses){
                 $scope.entityClasses = []
@@ -88,7 +90,8 @@ entityClassesController.controller('EntityClassesCtrl',['$scope','$http','$uibMo
 
         }
         $scope.removeVariable = function(varName){
-            delete $scope.selectedEC.variables[varName];
+            $scope.selectedEC.variables[varName] = null;
+            //delete $scope.selectedEC.variables[varName];
         };
         $scope.addVariable = function(){
             var newName = $scope.newVariable.name
@@ -133,7 +136,7 @@ entityClassesController.controller('EntityClassesCtrl',['$scope','$http','$uibMo
                     $scope.createSuccess = true;
                 },
                 function(message){
-                    $scope.errorMessage = "Error Updating Class: " + message.data;
+                    $scope.errorMessage = "Error Updating Class: " + message.data.error;
                 }
             )
         }//end updateClass

@@ -189,7 +189,20 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$uibModal',funct
             $scope.errorData = data;
         });
     };
- 
+     $scope.updatePerfConf = function(){
+      // set only : full_text_index,log_workfile_activity
+      var toSave = {};
+      toSave['performance.log_workfile_activity'] = $scope.sysConf['performance.log_workfile_activity'];
+      toSave['performance.full_text_index'] = $scope.sysConf['performance.full_text_index'];
+      $http({method: 'POST', data:toSave,url: '/hive/v2/Configuration'}).
+          success(function(data, status, headers, config) {
+            $scope.updatePerfConfSuccess = true;
+        }).
+        error(function(data, status, headers, config) {
+            $scope.updatedPerfConfFailure = true;
+            $scope.errorData = data;
+        });
+    };
   var getStorageLocations = function(){
     $http({method: 'GET', url: '/hive/v2/WorkFileStorage/?parameters=true'}).
         success(function(data, status, headers, config) {
@@ -200,8 +213,7 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$uibModal',funct
   var getConf = function(){
      $http({method: 'GET', url: '/hive/v2/Configuration'}).
         success(function(data, status, headers, config) {
-        // this callback will be called asynchronously
-        // when the response is available
+        // need to set these, they are returned as text  
         $scope.sysConf = data;
         if (data['policy.public-user-creation'] == "true")
           $scope.sysConf['policy.public-user-creation'] = true;
@@ -216,6 +228,16 @@ geneHiveControllers.controller('SysConfCtrl',['$scope','$http','$uibModal',funct
         else 
           $scope.sysConf['mail.smtp.starttls.enable'] = false;
 
+        if (data['performance.log_workfile_activity'] == "true") 
+        $scope.sysConf['performance.log_workfile_activity'] = true;
+        else 
+          $scope.sysConf['performance.log_workfile_activity'] = false;
+        
+        if (data['performance.full_text_index'] == "true") 
+        $scope.sysConf['performance.full_text_index'] = true;
+        else 
+          $scope.sysConf['performance.full_text_index'] = false;
+        
         }).
         error(function(data, status, headers, config) {
         // called asynchronously if an error occurs

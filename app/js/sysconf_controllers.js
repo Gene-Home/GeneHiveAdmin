@@ -149,7 +149,20 @@ sysConfControllers.controller('SysConfCtrl2',['$scope','$http','$uibModal',funct
             $scope.errorData = data;
         });
     };
-  
+    $scope.updatePerfConf = function(){
+      // set only : full_text_index,log_workfile_activity
+    var toSave = {};
+    toSave['performance.log_workfile_activity'] = $scope.sysConf['performance.log_workfile_activity'];
+    toSave['performance.full_text_index'] = $scope.sysConf['performance.full_text_index'];
+    $http({method: 'POST', data:toSave,url: '/hive/v2/Configuration'}).
+        success(function(data, status, headers, config) {
+            $scope.updatePerfConfSuccess = true;
+        }).
+        error(function(data, status, headers, config) {
+            $scope.updatedPerfConfFailure = true;
+            $scope.errorData = data;
+        });
+    };
   
   var getConf = function(){
      $http({method: 'GET', url: '/hive/v2/Configuration'}).

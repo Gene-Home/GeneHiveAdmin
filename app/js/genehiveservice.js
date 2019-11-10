@@ -17,7 +17,7 @@ geneHiveServices2.ERROR.USER_CONFIRMATION_EMAIL = 'Could not create a User or se
 geneHiveServices2.ERROR.USER_CREATION = 'Error Creating User';
 geneHiveServices2.ERROR.BAD_USER_OBJECT = 'User object was incomplete and could not be created';
 
-var api_url = 'http://localhost:8080/hive/v2/';
+var api_url = 'https://alpha.gene-hive.com/hive/v2/';
 
 
 geneHiveServices2.factory('Entity',['$resource',

@@ -12,7 +12,7 @@
     "angular-resource": "~1.5.8",
     "angular-ui-select": "~0.18.1",
     "angular-sanitize": "~1.5.8",
-    "angular-ui-grid": "~3.2.1",
+    "angular-ui-grid": "~4.0.4",
     "angular-base64": "2.0.1",
     "bootstrap": "~3.3.6",
     "angular-bootstrap": "~1.1.0",

@@ -2,7 +2,6 @@
 <div class="page-header">
 
   <h2>Work Files</h2>
-  <button class="btn btn-primary" ng-click="addWorkFile()">Add WorkFile</button>
 </div>
 <div class="row">
   <div class="col-xs-12 col-sm-4">
@@ -13,7 +12,7 @@
       <li><b>Group: </b><div class="pull-right">{{selectedWorkFile.group}}</div></li>
       <li><b>File Type: </b><div class="pull-right">{{selectedWorkFile.fileType}}</div></li>
       <li><b>Created By Job: </b><div class="pull-right">{{selectedWorkFile.creatorJobRun}}</div></li>
-      <li ng-show="selectedWorkFile.id"><button class="btn btn-primary" ng-click="editWorkFile()">Edit WorkFile</button></li>
+      <li ng-show="selectedWorkFile.id"><button class="btn btn-primary" ng-click="editWorkFile()">Edit WorkFile Properties</button></li>
       <li ng-show="selectedWorkFile.id"><a href='{{downloadLink}}' >Download</a></li>
     </ul>
   </div>
@@ -24,6 +23,7 @@
       <li><b>Trashed: </b><div class="pull-right">{{selectedWorkFile.isTrashed}}</div></li>
       <li><b>Hash: </b><div class="pull-right">{{selectedWorkFile.hash}}</div></li>
       <li><b>Token: </b><div class="pull-right">{{selectedWorkFile.token}}</div></li>
+      <li><b>Access: </b><div class="pull-right" ng-show="selectedWorkFile.hash"><button class="btn btn-primary" ng-click="showWorkFileHistory()">view</button></div></li>
     </ul>
   </div>
 </div>
@@ -80,7 +80,10 @@
     <p>
       <input type="text" class="form-control" ng-model="bsObj.workFileHash"/>
     </p>  
-      
+    <label>Original Name</label>
+    <p>
+       <input type="text" class="form-control" ng-model="bsObj.originalName"/>
+    </p>  
     
    </div>
   </div>
