@@ -1,0 +1,78 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+  <div class="page-header">
+
+  <h2><a href="" ng-click="listWorkFiles()">Work Files</a></h2>
+</div>
+  <div class="row">
+    
+    </div>
+        <div ng-show="successMessage" class="alert alert-success">
+          {{successMessage}}
+    </div>
+    <div ng-show="errorMessage" class="alert alert-danger">
+          {{errorMessage}}
+    </div>
+    <span class="panel-title section-title"><h4>WorkFile ID: {{workFile.id}}</h4></span>
+    <form >
+      <fieldset>
+        
+        <div class="form-group">
+          <label class="control-label" for="first">Original File Name:</label>
+          <input type="text" name="name" id="name" class="form-control" ng-model="workFile.originalName">
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="last">File Type</label>
+          <input type="text" name="bucket" id="bucket" class="form-control" ng-model="workFile.fileType">
+        </div>
+        <div class="form-group">
+        <label class="control-label" for="last">Storage Location</label>
+          <input type="text" name="bucket" id="bucket" class="form-control" ng-model="workFile.storage">
+        </div>
+            <div class="form-group">
+              <label class="control-label" for="group">Group</label>
+              <ui-select  ng-model ="workFile.group" theme="bootstrap" on-select="filter()">
+                <ui-select-match>
+                  <span ng-bind="$select.selected"></span>
+                </ui-select-match>
+                <ui-select-choices repeat="g in groupNames">
+                  <span ng-bind="g"></span>
+                </ui-select-choices>
+            </ui-select>
+
+        </div>
+          <div class="form-group">
+          <br>File:
+          <input  type="file" ngf-select ng-model="wFile" name="file"    
+                  accept="*/*"  >
+          
+          <button ng-click="wFile = null" ng-show="wFile">Remove</button>
+          <br>
+          <button 
+                  ng-click="uploadWorkFile(wFile)">Submit
+          </button>
+          <span class="progress" ng-show="wFile.progress >= 0">
+            <div style="width:{{wFile.progress}}%" 
+              ng-bind="wFile.progress + '%'">
+              
+            </div>
+
+            <div class="progress">
+            <div class="progress-bar active" 
+                  role="progressbar"  
+                  aria-valuenow="{{wFile.progress}}" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100" 
+                  style="width: {{wFile.progress}}%;">
+          {{wFile.progress}} %
+          </div>
+          </div>
+          </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary"  ng-click="listWorkFiles();clearMessages()" ng-disabled="saving">Cancel
+
+                </button>
+            </div>
+</fieldset></form>
+		</div>
+	</div>

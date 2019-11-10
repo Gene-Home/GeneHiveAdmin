@@ -1,0 +1,126 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="page-header">
+  <h2>Entities</h2>
+</div>
+<div>
+    <div class="alert alert-danger alert-dismissible" role="alert" ng-show="errorMessage">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>{{errorMessage}}</strong>
+    </div>
+  <div class="row">
+  	<div class="form-group col-xs-4">
+      <form>
+      <div class="form-group">
+      <label>Entity Class ({{entityClasses.length}}):</label>
+        <ui-select theme="bootstrap" ng-model="search.selectedEntityClass" on-select="onSearchEntitySelected($item, $model)"  style="min-width: 300px;" tabindex="0">
+          <ui-select-match placeholder="select an entity class">
+          {{$select.selected.name}}
+          </ui-select-match>
+          <ui-select-choices repeat="ent in (entityClasses | filter: $select.search)"  position='down'>
+          {{ent.name}}
+          </ui-select-choices>
+        </ui-select> 
+     </div>
+     
+     <div class="form-group">
+      <label>Search by Field ({{search.classfields.length}}):</label>
+        <ui-select  theme="bootstrap" 
+                  ng-model="search.classfield" 
+                  on-select="loadDistinctValues()" 
+                  style="min-width: 300px;" 
+                  ng-disabled="!search.classfields"
+                  tabindex="1">
+          <ui-select-match placeholder="select an entity field">
+            {{$select.selected}}
+          </ui-select-match>
+          <ui-select-choices repeat="f in (search.classfields | filter: $select.search)">
+            {{f}}
+          </ui-select-choices>
+        </ui-select>
+      </div>
+      <div class="form-group">
+      
+      <div ng-show="!entityFieldArrayHuge">
+          <label>{{search.selectedEntityClass.name}} {{search.classfield}} ({{search.distinctFieldVals.length}}): </label>
+          <ui-select ng-model="search.classFieldSearchFor" theme="bootstrap" style="min-width: 300px;" ng-disabled="!search.distinctFieldVals">
+           <ui-select-match placeholder="select a field value">{{$select.selected}}</ui-select-match>
+            <ui-select-choices repeat="fieldValue in search.distinctFieldVals | filter: $select.search">
+            <span ng-bind-html="fieldValue | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+      </div>
+      <div ng-show="!entityFieldArrayHuge">
+        <label>{{search.selectedEntityClass.name}} {{search.classfield}} Search for values such as :{{search.distinctFieldVals[0]}},{{search.distinctFieldVals[1]}},{{search.distinctFieldVals[2]}} </label>
+        <input type="text" class="form-control" ng-model="fullTextValue">
+      </div>
+    </div>
+    <!--
+    <div class="form-group">
+      <label>Search by {{search.selectedEntityClass.name}} ID</label>
+      <input type="text" class="form-control" ng-disabled="true">
+    </div>
+    -->
+    <input type="submit" class="btn btn-primary" 
+      ng-click="searchEntity()" 
+        value ="Search"
+        ng-show="!entityFieldArrayHuge">
+    <input type="submit" class="btn btn-primary" 
+            ng-click="searchFullText(1,3)" 
+            value="Search FT"
+            ng-show="!entityFieldArrayHuge">
+    </form>
+      
+  </div>
+  <div class="form-group col-xs-8">
+    <form>
+    <div class="form-group">
+      <label>Text Search</label>
+      <input type="text" class="form-control" ng-model="fullTextValue">
+    </div>
+     <div class="checkbox">
+    <label>
+      <input type="checkbox" ng-model="search.workFilesOnly"> Only Search for Entities with Files
+    </label>
+  </div>
+    
+    </form>
+  </div>
+	 <div class="clearfix"></div>
+    <div class="col-xs-12 col-sm-12">
+    <div style="width: 100%;height: 480px;" ui-grid="gridOptions" ui-grid-pagination ui-grid-selection></div>
+    <!--
+    <div align="center">  
+      <h5>{{totalEntityCount}} Results VVV {{currentPage}}</h5>
+      <ul uib-pagination total-items="totalEntityCount" ng-model="currentPage" ng-change="pageChanged()">X</ul>
+    </div>
+		  <table class="table table-bordered">
+       <th ng-repeat="(key,value) in entityResults[0]">{{key}}</th>
+      <tr ng-repeat="ent in entityResults">
+        
+        <td ng-repeat="(key, value) in ent">{{value}}
+           
+            <ul class="list-unstyled">
+            <li><b>Name:</b> {{ent.name}}</li>
+            <li><b>People Involved:</b> {{ent.peopleInvolved}}</li>
+            <li><b>Event:</b> {{ent.eventRecordedAt}}</li>  
+            <li><b>Created On:</b> {{ent._creation_date | date:'medium'}}</li>
+            <li><b>Last Updated:</b> {{ent._updated | date:'medium'}}</li>
+            <li><b>Owner:</b> {{ent._owner}}</li>
+            <li><b>Creator:</b> {{ent._creator}}</li>
+            <li><b>Group:</b> {{ent._group}}</li>
+            <li><b>Class:</b> {{ent._class}}</li>
+            <li><b>Permissions:</b> {{ent._permissions}}</li>
+            </ul>
+          
+         
+
+          </td>
+          
+      </tr>  
+      </table>
+      -->
+    </div>
+  </div>
+ </div> 

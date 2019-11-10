@@ -1,0 +1,71 @@
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main ">
+  <div class="page-header">
+  <h2>System Email Settings</h2>
+<div class="row">  
+  <form role="form">  
+    <div ng-show="updateSmtpConfSuccess" class="alert alert-success">
+          SMPT Setting Updated Successfully
+    </div>
+    <div ng-show="updatedSmtpConfFailure" class="alert alert-danger">
+      Error Updating Settings:{{errorData}}
+    </div>   
+    <div class="form-group col-xs-4">
+      <label for="fromAddress">SMTP FROM</label>
+      <input type="email" class="form-control" ng-model="sysConf['mail.smtp.from']">
+      <span class="help-block">The address to use for "from" and "reply-to".</span>
+    </div>
+    <div class="form-group col-xs-4">
+      <label for="fromAddress">SMTP Email User</label>
+      <input type="text" class="form-control" ng-model="sysConf['mail.smtp.user']">
+      <span class="help-block">The username expected by the SMTP host.
+      </span>
+    </div>
+    <div class="form-group col-xs-4">
+      <label for="fromAddress">SMTP Port</label>
+      <input type="text" class="form-control" ng-model="sysConf['mail.smtp.port']">
+      <span class="help-block">The port number of the SMTP host.
+      </span>
+    </div>
+    <div class="form-group col-xs-4">
+      <label for="fromAddress">SMTP Host</label>
+      <input type="text" class="form-control" ng-model="sysConf['mail.smtp.host']">
+      <span class="help-block">SMTP Host 
+      </span>
+    </div>
+    <div class="form-group col-xs-4">
+      <label for="fromAddress">SMTP Password</label>
+      <input type="text" class="form-control" ng-model="sysConf['mail.smtp.password']">
+      <span class="help-block">The password expected by the SMTP host. 
+      </span>
+    </div>
+    <div class="form-group col-xs-4">
+      <label for="fromAddress">SMTP Start TTLS Enable?</label>
+      <select class="form-control" ng-model="sysConf['mail.smtp.starttls.enable']">
+        <option ng-repeat="g in ['true','false']" value="{{g}}">
+          {{g}}
+        </option>
+      </select>
+      <span class="help-block"> Whether the SMTP host is going to try to use STARTTLS
+      </span>
+    </div>
+    <div class="form-group col-xs-4">  
+      <input type="button" class="btn btn-success btn-lg" value="Send Test Email" ng-click="testEmail()">
+      <span class="help-block">Sends a test email to the requesting superuser, without setting mail configuration variables. For this to be useful, your own email must be set properly.</span>
+      <div ng-show="sending" class="progress progress-striped active">
+        <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+          <b>SENDING</b> - Please Wait
+        </div>
+      </div>
+      <div ng-show="testResultsSuccess" class="alert alert-success">
+        Email Successfully Sent
+      </div>
+      <div ng-show="testResultsError" class="alert alert-danger">
+        Error Sending Email: {{testResultsError | json}}
+      </div>
+    </div>
+    <div class="form-group col-xs-8">
+      <input type="button" class="btn btn-success btn-lg" ng-click="updateSmtpConf()" value ="Update Email Settings">
+    </div>
+
+    </form>
+  </div>

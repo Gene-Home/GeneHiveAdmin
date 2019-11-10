@@ -1,0 +1,104 @@
+<div  class="modal-fade">
+    <div class="modal-dialog">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="cancel()">&times;</button>
+          <h4 class="modal-title">Create A New Entity</h4>
+        </div>
+        <div class="modal-body">
+            <div ng-show ="! createSuccess">
+            <pre>
+                {{ newEntity | json}}
+            </pre>    
+                <form name="newClassForm" ng-submit="createEntity(newClassForm.$valid)" novalidate>
+                    <div class="form-group" ng-class="{ 'has-error': newClassForm.$invalid && submitted }">
+                        
+                        <label>Entity ID _entity_id  (required - must be unique to the system)</label>
+                        <input  class="form-control" name="_entity_id" type="text" ng-model="newEntity._entity_id" required >
+                    </div>
+                    <div class="form-group">
+                        <label>Class Description</label>
+                        <input  class="form-control" name="description" type="text" ng-model="newClass.description" >
+                    </div>
+                    <div class="form-group">
+                        <table class="table table-striped witdh:80%">
+                        <h4>Variables:</h4>
+                        <th></th><th>Name</th><th>Type</th><th>Class(if type=E)</th><th>Category</th><th>Codes</th>
+                            <tbody ng-repeat="(key,varib) in newClass.variables">
+                            <tr>
+                                <td>[<a href ng-click="removeVariable(key)">X</a>]</td>
+                                <td>{{key}}</td>
+                                <td>{{varib.type}}</td>
+                                <td>{{varib.entity_class_name}}</td>
+                                <td>{{varib.category}}</td>
+                                <td>{{varib.codes}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label>Variable Name</label>
+                        <input class="form-control" type="text" ng-model="newVariable.name">
+                    </div>
+                    <div class="form-group">
+                        <label>Varaibale Categories</label>
+                        <input class="form-control" type="text" ng-model="newVariable.category">
+                    </div>
+                    <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            is Array<input  type="checkbox" ng-model="newVariable.is_array" >   
+                        </label>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                    <label>Variable Type</label>
+                        <select class="form-control" ng-model="newVariable.type">
+                            <option ng-repeat="(k,v) in { Date:'D',Integer:'I',
+                                                        Float:'F',
+                                                        Text:'T',
+                                                        Codes:'C',
+                                                        Entity:'E'}" value="{{v}}">
+                                {{k}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div ng-show="(newVariable.type ==='E')" >    
+                            <label>Entity Class Type</label>
+                            <select class="form-control" ng-model="newVariable.entity_class_name">
+                                <option ng-repeat="c in entityClasses" value="{{c.name}}"> 
+                                    {{c.name}}
+                                </option>
+                            </select>
+                        </div>
+                        <div ng-show="(newVariable.type ==='C')">
+                            <label>Code List  (<i>Code : Name</i> ie M : Male ) </label><br />
+                            <ul ng-repeat="(k,v) in newVariable.codes">
+                                <li>[<a href ng-click="removeCode(k)">X</a>]{{k}} : {{v}}</li>
+                            </ul>
+                            <label>New Code</label>
+                            <input type="text" ng-model="newCode.code">
+                            <label>New Code Name</label>
+                            <input type="text" ng-model="newCode.name">
+                            <button type='button' ng-click="addCode()">Add Code</button> 
+                        </div>
+                        <button type='button' class="btn btn-primary" ng-click="addVariable()">Add Var</button>
+                    </div>
+                    <button type='button' class="btn btn-primary" ng-click="updateClass(newClassForm.$valid)">2UPdate</button>
+                    <button type="submit" class="btn btn-primary">1Submit</button>
+                    
+                </form>
+            </div>
+            <div ng-show="errorMessage" class="alert alert-danger">
+                    {{errorMessage}}
+            </div>
+            <div ng-show="successMessage" class="alert alert-success">
+                    {{successMessage}}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button ng-show="successCreate" class="btn btn-primary" ng-click="ok()">OK</button>
+            <button ng-show="! successCreate"class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>          
+    </div>
+</div>
